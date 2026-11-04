@@ -25,7 +25,8 @@ class GeneratorTests(unittest.TestCase):
 
     def test_aliases_and_unknown_drink(self):
         for raw, expected in [(' Black-Coffee ', 'black'), ('BLACK_COFFEE', 'black'),
-                              ('coffee', 'black'), ('CAPPUCCINO', 'cappuccino'), ('expresso', 'espresso')]:
+                              ('coffee', 'black'), ('CAPPUCCINO', 'cappuccino'), ('expresso', 'espresso'),
+                              ('OTHER', 'other'), ('unknown', 'other'), ('unrecognised', 'other')]:
             self.assertEqual(self.model.canonical_coffee(raw), expected)
         for unsupported in ['tomato soup', 'latte', 'decaf', 'double_espresso', 'americano', 'filter']:
             with self.assertRaises(ValueError):
@@ -70,7 +71,7 @@ class GeneratorTests(unittest.TestCase):
                 self.assertGreaterEqual(len(jokes), 100)
                 moment = datetime(2026, 11, 4, period['start_hour'], 59)
                 for joke in jokes:
-                    for opener in self.model.data['openers']:
+                    for opener in self.model.openers(coffee):
                         text = self.model.compose(coffee, moment, joke, opener)
                         self.assertLessEqual(len(text), 180, text)
                         self.assertNotIn('{', text)
@@ -103,21 +104,24 @@ class GeneratorTests(unittest.TestCase):
 
     def test_same_context_uses_every_available_joke_before_repeating(self):
         moment = datetime.fromisoformat('2026-11-04T16:30:00+01:00')
-        candidates = self.model.candidates('espresso', 'afternoon')
-        for _ in candidates:
-            self.generator.comment('espresso', moment)
-        with sqlite3.connect(self.path) as connection:
-            usage = dict(connection.execute('SELECT punchline, uses FROM punchline_usage'))
-        self.assertEqual(set(usage), {j['id'] for j in candidates})
-        self.assertEqual(set(usage.values()), {1})
-        self.generator.comment('espresso', moment)
-        with sqlite3.connect(self.path) as connection:
-            self.assertEqual(connection.execute('SELECT MAX(uses) FROM punchline_usage').fetchone()[0], 2)
+        for coffee in ['espresso', 'other']:
+            path = Path(self.temp.name) / f'rotation-{coffee}.db'
+            generator = CommentGenerator(self.model, path, rng=random.Random(7))
+            candidates = self.model.candidates(coffee, 'afternoon')
+            for _ in candidates:
+                generator.comment(coffee, moment)
+            with sqlite3.connect(path) as connection:
+                usage = dict(connection.execute('SELECT punchline, uses FROM punchline_usage'))
+            self.assertEqual(set(usage), {j['id'] for j in candidates})
+            self.assertEqual(set(usage.values()), {1})
+            generator.comment(coffee, moment)
+            with sqlite3.connect(path) as connection:
+                self.assertEqual(connection.execute('SELECT MAX(uses) FROM punchline_usage').fetchone()[0], 2)
 
     def test_mixed_drinks_and_times_preserve_joke_and_opener_windows(self):
         jokes, openers = [], []
         for index in range(180):
-            coffee = ['black', 'cappuccino', 'espresso'][index % 3]
+            coffee = ['black', 'cappuccino', 'espresso', 'other'][index % 4]
             hour = [7, 11, 15, 19, 4][index % 5]
             moment = datetime(2026, 11, 4, hour, tzinfo=self.model.timezone)
             self.generator.comment(coffee, moment)
@@ -155,6 +159,9 @@ class GeneratorTests(unittest.TestCase):
         payload = json.loads(WEIGHTS.read_text())
         payload['punchlines'] = payload['punchlines'][:2]
         payload['openers'] = payload['openers'][:2]
+        # Legacy custom models use an unrestricted pool for every category.
+        for item in payload['punchlines'] + payload['openers']:
+            item.pop('coffees', None)
         small = Path(self.temp.name) / 'small.json'
         small.write_text(json.dumps(payload))
         generator = CommentGenerator(CoffeeModel(small), self.path, rng=random.Random(2))
@@ -169,6 +176,31 @@ class GeneratorTests(unittest.TestCase):
 
     def test_shipped_model_matches_authored_source(self):
         self.assertEqual(json.loads(WEIGHTS.read_text()), build())
+
+    def test_other_never_uses_confirmed_coffee_jokes_or_openers(self):
+        other_openers = {item['id'] for item in self.model.openers('other')}
+        self.assertEqual(len(other_openers), 10)
+        self.assertIsNone(self.model.data['coffee_types']['other']['caffeine'])
+        for period in self.model.data['periods']:
+            other = self.model.candidates('other', period['id'])
+            self.assertTrue(all(joke.get('coffees') == ['other'] for joke in other))
+            other_ids = {joke['id'] for joke in other}
+            self.assertGreater(len(other_ids), self.generator.history_size)
+            for coffee in ['black', 'cappuccino', 'espresso']:
+                known_ids = {joke['id'] for joke in self.model.candidates(coffee, period['id'])}
+                self.assertTrue(other_ids.isdisjoint(known_ids))
+                self.assertEqual(len(known_ids), 118)
+                self.assertTrue(other_openers.isdisjoint({item['id'] for item in self.model.openers(coffee)}))
+
+    def test_missing_or_invalid_opener_coverage_is_rejected(self):
+        for invalid_restriction in [[], ['nonexistent'], ['black', 'cappuccino', 'espresso']]:
+            payload = json.loads(WEIGHTS.read_text())
+            for opener in payload['openers']:
+                opener['coffees'] = invalid_restriction
+            invalid = Path(self.temp.name) / 'openers.json'
+            invalid.write_text(json.dumps(payload))
+            with self.assertRaises(ValueError):
+                CoffeeModel(invalid)
 
     def test_duplicate_punchline_text_is_rejected(self):
         payload = json.loads(WEIGHTS.read_text())

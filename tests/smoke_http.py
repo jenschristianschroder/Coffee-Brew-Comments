@@ -1,6 +1,7 @@
 """Exercise a running server over a real HTTP socket; standard library only."""
 import json
 import os
+from pathlib import Path
 import time
 import urllib.error
 import urllib.request
@@ -18,9 +19,11 @@ for attempt in range(100):
         time.sleep(0.2)
 
 with urllib.request.urlopen(base + '/coffee-types', timeout=5) as response:
-    assert json.load(response)['coffee_types'] == ['black', 'cappuccino', 'espresso']
+    assert json.load(response)['coffee_types'] == ['black', 'cappuccino', 'espresso', 'other']
 
-for coffee in ['black', 'cappuccino', 'espresso']:
+model = json.loads((Path(__file__).resolve().parents[1] / 'weights.json').read_text())
+other_lines = [item['text'] for item in model['punchlines'] if item.get('coffees') == ['other']]
+for coffee in ['black', 'cappuccino', 'espresso', 'other']:
     payload = {'coffee_type': coffee, 'datetime': '2026-11-04T16:30:00+01:00'}
     request = urllib.request.Request(base + '/comment', data=json.dumps(payload).encode(),
                                      headers={'Content-Type': 'application/json'})
@@ -28,7 +31,11 @@ for coffee in ['black', 'cappuccino', 'espresso']:
         assert response.status == 200
         result = json.load(response)
         assert set(result) == {'comment'}
-        assert coffee in result['comment'].lower() and '4:30 p.m.' in result['comment']
+        assert '4:30 p.m.' in result['comment']
+        if coffee == 'other':
+            assert any(result['comment'].endswith(line) for line in other_lines)
+        else:
+            assert coffee in result['comment'].lower()
         print(json.dumps(result))
 
 request = urllib.request.Request(base + '/comment', data=b'{"coffee_type":"espresso","datetime":"invalid"}',

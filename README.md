@@ -4,12 +4,17 @@ A small Docker service that turns a coffee type and date-time into a short,
 sarcastic comment for your office coffee machine. Send the returned text to the
 Raspberry Pi's existing text-to-speech setup.
 
-The generator supports **black coffee, cappuccino, and espresso**, with **300
-original punchlines, ten setups, and directly assigned sampling weights**.
-Coffee type and time of day determine which lines fit. Each coffee/time-of-day
-combination has 118 applicable punchlines and 1,180 wording combinations, before
-counting different clock times. Different setups are wording variations; the
-300 punchlines are the actual joke bank.
+The generator supports **black coffee, cappuccino, espresso, and `other`** for
+unidentified machine activity. It has **420 original punchlines**: 300 for coffee
+and 120 for mystery events, with separate sets of ten opening styles.
+
+| Input category | Applicable jokes per time period | Opening styles | Wording combinations |
+| --- | ---: | ---: | ---: |
+| Black, cappuccino, or espresso | 118 | 10 | 1,180 |
+| Other machine activity | 104 | 10 | 1,040 |
+
+These counts exclude different clock times. Different setups are wording
+variations; the punchlines are the actual joke bank. Weights are assigned directly.
 It needs no training, GPU, model download, or external API. This is a conditional
 phrase generator: it combines authored text rather than inventing arbitrary text
 with a neural language model.
@@ -47,8 +52,9 @@ One possible response:
 Each request samples a compatible comment. It excludes the last **60 punchlines**,
 prefers less-used jokes, and avoids the last **two opening styles**, including
 across container restarts. That history is shared by requests to this instance.
-Starting with fresh history, repeatedly requesting the same coffee/time period
-uses all 118 applicable jokes before any punchline repeats. When contexts vary,
+Starting with fresh history, repeatedly requesting the same type/time period
+uses every applicable joke before any punchline repeats: 118 for a recognized
+coffee, or 104 for `other`. When contexts vary,
 usage counts are shared so frequently heard generic jokes give way to other material.
 Repeating a request generates another comment; this endpoint does not deduplicate
 brew events or play audio itself.
@@ -63,14 +69,43 @@ brew events or play audio itself.
 `datetime` must be an ISO 8601 string with `Z` or a UTC offset, for example
 `2026-11-04T15:30:00Z`. The service converts that instant to `COFFEE_TIMEZONE`
 before selecting jokes and displaying the time. Offsets make daylight-saving
-ambiguities explicit. Missing offsets, invalid dates, unknown drinks, and extra
+ambiguities explicit. Missing offsets, invalid dates, unsupported type values, and extra
 request fields return HTTP 422. `coffee_type` is case-insensitive; spaces,
 underscores, and hyphens are normalized.
 
-Supported types are exactly `black`, `cappuccino`, and `espresso`. Black coffee
+Supported types are `black`, `cappuccino`, `espresso`, and `other`. Black coffee
 also accepts `black coffee`, `coffee`, and `regular coffee`. The existing
-`expresso` alias is accepted for espresso. Other beverages, including latte,
+`expresso` alias is accepted for espresso. The aliases `unknown`, `unrecognized`,
+and `unrecognised` map to `other`. Unsupported beverages, including latte,
 decaf, filter, and double espresso, return HTTP 422.
+
+## Unrecognized or unexplained activity
+
+Send `"coffee_type": "other"` when the upstream prediction cannot recognize a
+drink, the vibration pattern is unrecognizable, the machine is being cleaned or
+serviced, or an event simply defies explanation. This service does not infer the
+actual cause: its comments play with possibilities, from confused sensors and
+cleaning cycles to office ghosts and unsolicited interdimensional firmware.
+
+```bash
+curl -sS http://localhost:8080/comment \
+  -H 'Content-Type: application/json' \
+  -d '{"coffee_type":"other","datetime":"2026-11-04T10:15:00+01:00"}'
+```
+
+One possible response:
+
+```json
+{
+  "comment": "Unidentified machine activity at 10:15 a.m. Could be a cleaning cycle. Could be a seance with excellent plumbing."
+}
+```
+
+`other` has dedicated openings and punchlines that do not announce a completed
+coffee, assume a drink exists, or identify a real maintenance fault. Its caffeine
+metadata is unknown (`null`). Known coffee types keep their own joke pools.
+The caller should map its unrecognized events to `other`; arbitrary unsupported
+strings do not silently become this category.
 
 ## Call it from your brew handler
 
@@ -110,11 +145,13 @@ text, a positive relative `weight`, and optional context restrictions. The model
 filters by coffee and time, excludes the last 60 punchlines, and finds the
 least-used remaining jokes. It then samples among those according to their
 weights. A high weight gives a joke earlier priority without letting it crowd
-out the rest of the bank. Ten opening styles are sampled independently, excluding
-the two most recently heard styles.
+out the rest of the bank. Opening styles are filtered by category before sampling,
+excluding the two most recently heard styles. A model entry's optional `coffees`
+restriction applies to both punchlines and openers. For `other`, the supplied
+model excludes all confirmed-coffee material in both stages.
 
 If a custom model has too few choices for a repeat window, the generator reuses
-the least recent applicable choice. The supplied 118-joke pools are large enough
+the least recent applicable choice. The supplied 104- and 118-joke pools are large enough
 to maintain the full 60-punchline exclusion window.
 
 Change the JSON and rebuild the container to update it. The authored joke bank is
@@ -132,7 +169,7 @@ editing a running installation; append new lines to a group to preserve its IDs.
 | Evening | 17:00–23:59 |
 
 Set `COFFEE_TIMEZONE` in `compose.yaml` to another IANA timezone if required.
-The jokes are in English. They target the beverage, the clock, and office life.
+The jokes are in English. They target the beverage, the clock, machine mysteries, and office life.
 They do not use anyone's name or personal information. History stores the last
 100 pairs of punchline/opener identifiers, plus a usage counter for each
 punchline that has been heard. Existing history databases are upgraded in place;
@@ -159,7 +196,8 @@ docker run --rm coffee-snark-test
 
 GitHub Actions builds and tests the container on both x86-64 and ARM64 runners,
 then checks the production HTTP endpoint. The tests cover time zones and DST,
-coffee aliases and unsupported drinks, comment length, repetition history,
+coffee aliases and unsupported drinks, isolation of mystery-event material,
+comment length, repetition history,
 fair use of the joke bank, database upgrades, concurrent requests, input
 validation, and the HTTP contract.
 

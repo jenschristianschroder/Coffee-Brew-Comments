@@ -25,6 +25,15 @@
         "expresso"
       ],
       "caffeine": true
+    },
+    "other": {
+      "label": "Unidentified machine activity",
+      "aliases": [
+        "unknown",
+        "unrecognized",
+        "unrecognised"
+      ],
+      "caffeine": null
     }
   },
   "periods": [
@@ -58,354 +67,784 @@
     {
       "id": "order",
       "text": "{coffee} at {clock}.",
-      "weight": 1.5
+      "weight": 1.5,
+      "coffees": [
+        "black",
+        "cappuccino",
+        "espresso"
+      ]
     },
     {
       "id": "question",
       "text": "{coffee} at {clock}?",
-      "weight": 1.0
+      "weight": 1.0,
+      "coffees": [
+        "black",
+        "cappuccino",
+        "espresso"
+      ]
     },
     {
       "id": "ah",
       "text": "Ah, {coffee_lower} at {clock}.",
-      "weight": 1.0
+      "weight": 1.0,
+      "coffees": [
+        "black",
+        "cappuccino",
+        "espresso"
+      ]
     },
     {
       "id": "it_is",
       "text": "It's {clock}. {coffee} it is.",
-      "weight": 1.0
+      "weight": 1.0,
+      "coffees": [
+        "black",
+        "cappuccino",
+        "espresso"
+      ]
     },
     {
       "id": "apparently",
       "text": "{coffee}. At {clock}, apparently.",
-      "weight": 1.0
+      "weight": 1.0,
+      "coffees": [
+        "black",
+        "cappuccino",
+        "espresso"
+      ]
     },
     {
       "id": "reporting",
       "text": "{coffee}, reporting for duty at {clock}.",
-      "weight": 1.0
+      "weight": 1.0,
+      "coffees": [
+        "black",
+        "cappuccino",
+        "espresso"
+      ]
     },
     {
       "id": "machine",
       "text": "At {clock}, the machine presents {coffee_lower}.",
-      "weight": 1.0
+      "weight": 1.0,
+      "coffees": [
+        "black",
+        "cappuccino",
+        "espresso"
+      ]
     },
     {
       "id": "strategy",
       "text": "Today's {clock} strategy: {coffee_lower}.",
-      "weight": 1.0
+      "weight": 1.0,
+      "coffees": [
+        "black",
+        "cappuccino",
+        "espresso"
+      ]
     },
     {
       "id": "chat",
       "text": "{coffee} has entered the chat at {clock}.",
-      "weight": 1.0
+      "weight": 1.0,
+      "coffees": [
+        "black",
+        "cappuccino",
+        "espresso"
+      ]
     },
     {
       "id": "plan",
       "text": "It's {clock}, and {coffee_lower} is the plan.",
-      "weight": 1.0
+      "weight": 1.0,
+      "coffees": [
+        "black",
+        "cappuccino",
+        "espresso"
+      ]
+    },
+    {
+      "id": "other_activity",
+      "text": "Unidentified machine activity at {clock}.",
+      "weight": 1.5,
+      "coffees": [
+        "other"
+      ]
+    },
+    {
+      "id": "other_mystery",
+      "text": "Something happened at {clock}. Classification remains a mystery.",
+      "weight": 1.0,
+      "coffees": [
+        "other"
+      ]
+    },
+    {
+      "id": "other_phase",
+      "text": "It's {clock}. The machine has entered its mysterious phase.",
+      "weight": 1.0,
+      "coffees": [
+        "other"
+      ]
+    },
+    {
+      "id": "other_category",
+      "text": "At {clock}, we have a new entry in the unknown category.",
+      "weight": 1.0,
+      "coffees": [
+        "other"
+      ]
+    },
+    {
+      "id": "other_identity",
+      "text": "The {clock} event has declined to identify itself.",
+      "weight": 1.0,
+      "coffees": [
+        "other"
+      ]
+    },
+    {
+      "id": "other_weird",
+      "text": "Unscheduled weirdness detected at {clock}.",
+      "weight": 1.0,
+      "coffees": [
+        "other"
+      ]
+    },
+    {
+      "id": "other_plot",
+      "text": "At {clock}, the plot thickens near the coffee machine.",
+      "weight": 1.0,
+      "coffees": [
+        "other"
+      ]
+    },
+    {
+      "id": "other_whatever",
+      "text": "Whatever that was, it happened at {clock}.",
+      "weight": 1.0,
+      "coffees": [
+        "other"
+      ]
+    },
+    {
+      "id": "other_script",
+      "text": "It's {clock}, and the machine has gone off-script.",
+      "weight": 1.0,
+      "coffees": [
+        "other"
+      ]
+    },
+    {
+      "id": "other_questions",
+      "text": "Something stirred at {clock}. The machine is not taking questions.",
+      "weight": 1.0,
+      "coffees": [
+        "other"
+      ]
     }
   ],
   "punchlines": [
     {
       "id": "office_01",
       "text": "Liquid optimism. Results may vary.",
-      "weight": 1.0
+      "weight": 1.0,
+      "coffees": [
+        "black",
+        "cappuccino",
+        "espresso"
+      ]
     },
     {
       "id": "office_02",
       "text": "Another cup for the task we are still not starting.",
-      "weight": 1.0
+      "weight": 1.0,
+      "coffees": [
+        "black",
+        "cappuccino",
+        "espresso"
+      ]
     },
     {
       "id": "office_03",
       "text": "The machine has done its part. Awkwardly, the rest is up to us.",
-      "weight": 1.0
+      "weight": 1.0,
+      "coffees": [
+        "black",
+        "cappuccino",
+        "espresso"
+      ]
     },
     {
       "id": "office_04",
       "text": "A very convincing impression of progress.",
-      "weight": 1.0
+      "weight": 1.0,
+      "coffees": [
+        "black",
+        "cappuccino",
+        "espresso"
+      ]
     },
     {
       "id": "office_05",
       "text": "At least one thing in this office has finished brewing.",
-      "weight": 1.0
+      "weight": 1.0,
+      "coffees": [
+        "black",
+        "cappuccino",
+        "espresso"
+      ]
     },
     {
       "id": "office_06",
       "text": "This meeting could have been a coffee. And now it is.",
-      "weight": 1.0
+      "weight": 1.0,
+      "coffees": [
+        "black",
+        "cappuccino",
+        "espresso"
+      ]
     },
     {
       "id": "office_07",
       "text": "A small ceremony for a very large to-do list.",
-      "weight": 1.0
+      "weight": 1.0,
+      "coffees": [
+        "black",
+        "cappuccino",
+        "espresso"
+      ]
     },
     {
       "id": "office_08",
       "text": "The spreadsheet is going to be so impressed.",
-      "weight": 1.0
+      "weight": 1.0,
+      "coffees": [
+        "black",
+        "cappuccino",
+        "espresso"
+      ]
     },
     {
       "id": "office_09",
       "text": "Productivity has been notified. No response yet.",
-      "weight": 1.0
+      "weight": 1.0,
+      "coffees": [
+        "black",
+        "cappuccino",
+        "espresso"
+      ]
     },
     {
       "id": "office_10",
       "text": "One more beverage between us and the actual task.",
-      "weight": 1.0
+      "weight": 1.0,
+      "coffees": [
+        "black",
+        "cappuccino",
+        "espresso"
+      ]
     },
     {
       "id": "office_11",
       "text": "Finally, an office process that produces something useful.",
-      "weight": 1.0
+      "weight": 1.0,
+      "coffees": [
+        "black",
+        "cappuccino",
+        "espresso"
+      ]
     },
     {
       "id": "office_12",
       "text": "Another successful meeting with the coffee machine.",
-      "weight": 1.0
+      "weight": 1.0,
+      "coffees": [
+        "black",
+        "cappuccino",
+        "espresso"
+      ]
     },
     {
       "id": "office_13",
       "text": "The most reliable member of the team strikes again.",
-      "weight": 1.0
+      "weight": 1.0,
+      "coffees": [
+        "black",
+        "cappuccino",
+        "espresso"
+      ]
     },
     {
       "id": "office_14",
       "text": "A bold investment in the appearance of being busy.",
-      "weight": 1.0
+      "weight": 1.0,
+      "coffees": [
+        "black",
+        "cappuccino",
+        "espresso"
+      ]
     },
     {
       "id": "office_15",
       "text": "Please allow three to five business sips for motivation.",
-      "weight": 1.0
+      "weight": 1.0,
+      "coffees": [
+        "black",
+        "cappuccino",
+        "espresso"
+      ]
     },
     {
       "id": "office_16",
       "text": "The coffee is ready. The plan remains under review.",
-      "weight": 1.0
+      "weight": 1.0,
+      "coffees": [
+        "black",
+        "cappuccino",
+        "espresso"
+      ]
     },
     {
       "id": "office_17",
       "text": "A deliverable with an actual delivery date. Refreshing.",
-      "weight": 1.0
+      "weight": 1.0,
+      "coffees": [
+        "black",
+        "cappuccino",
+        "espresso"
+      ]
     },
     {
       "id": "office_18",
       "text": "Finally, something warm from a system that accepts requests.",
-      "weight": 1.0
+      "weight": 1.0,
+      "coffees": [
+        "black",
+        "cappuccino",
+        "espresso"
+      ]
     },
     {
       "id": "office_19",
       "text": "This is what happens when the break gets its own business case.",
-      "weight": 1.0
+      "weight": 1.0,
+      "coffees": [
+        "black",
+        "cappuccino",
+        "espresso"
+      ]
     },
     {
       "id": "office_20",
       "text": "The only project here with a clearly marked finish line.",
-      "weight": 1.0
+      "weight": 1.0,
+      "coffees": [
+        "black",
+        "cappuccino",
+        "espresso"
+      ]
     },
     {
       "id": "office_21",
       "text": "A budget meeting between a mug and several good intentions.",
-      "weight": 1.0
+      "weight": 1.0,
+      "coffees": [
+        "black",
+        "cappuccino",
+        "espresso"
+      ]
     },
     {
       "id": "office_22",
       "text": "One small cup for the desk. One giant detour from the work.",
-      "weight": 1.0
+      "weight": 1.0,
+      "coffees": [
+        "black",
+        "cappuccino",
+        "espresso"
+      ]
     },
     {
       "id": "office_23",
       "text": "The machine would like credit for all subsequent good ideas.",
-      "weight": 1.0
+      "weight": 1.0,
+      "coffees": [
+        "black",
+        "cappuccino",
+        "espresso"
+      ]
     },
     {
       "id": "office_24",
       "text": "An excellent excuse to stand somewhere else for a minute.",
-      "weight": 1.0
+      "weight": 1.0,
+      "coffees": [
+        "black",
+        "cappuccino",
+        "espresso"
+      ]
     },
     {
       "id": "office_25",
       "text": "A beverage has successfully moved to the top of the backlog.",
-      "weight": 1.0
+      "weight": 1.0,
+      "coffees": [
+        "black",
+        "cappuccino",
+        "espresso"
+      ]
     },
     {
       "id": "office_26",
       "text": "Still the best thing to come out of pressing a button today.",
-      "weight": 1.0
+      "weight": 1.0,
+      "coffees": [
+        "black",
+        "cappuccino",
+        "espresso"
+      ]
     },
     {
       "id": "office_27",
       "text": "No agenda. No slides. Somehow the most useful meeting.",
-      "weight": 1.0
+      "weight": 1.0,
+      "coffees": [
+        "black",
+        "cappuccino",
+        "espresso"
+      ]
     },
     {
       "id": "office_28",
       "text": "We have converted beans into another reason to check our phones.",
-      "weight": 1.0
+      "weight": 1.0,
+      "coffees": [
+        "black",
+        "cappuccino",
+        "espresso"
+      ]
     },
     {
       "id": "office_29",
       "text": "The mug has accepted ownership of the next difficult decision.",
-      "weight": 1.0
+      "weight": 1.0,
+      "coffees": [
+        "black",
+        "cappuccino",
+        "espresso"
+      ]
     },
     {
       "id": "office_30",
       "text": "The printer could learn a lot from this machine.",
-      "weight": 1.0
+      "weight": 1.0,
+      "coffees": [
+        "black",
+        "cappuccino",
+        "espresso"
+      ]
     },
     {
       "id": "office_31",
       "text": "A tiny holiday with an extremely strict return policy.",
-      "weight": 1.0
+      "weight": 1.0,
+      "coffees": [
+        "black",
+        "cappuccino",
+        "espresso"
+      ]
     },
     {
       "id": "office_32",
       "text": "This break has excellent stakeholder support.",
-      "weight": 1.0
+      "weight": 1.0,
+      "coffees": [
+        "black",
+        "cappuccino",
+        "espresso"
+      ]
     },
     {
       "id": "office_33",
       "text": "At least this queue ends with a reward.",
-      "weight": 1.0
+      "weight": 1.0,
+      "coffees": [
+        "black",
+        "cappuccino",
+        "espresso"
+      ]
     },
     {
       "id": "office_34",
       "text": "The machine says finished. A word the inbox could try sometime.",
-      "weight": 1.0
+      "weight": 1.0,
+      "coffees": [
+        "black",
+        "cappuccino",
+        "espresso"
+      ]
     },
     {
       "id": "office_35",
       "text": "Another milestone on the scenic route to doing the work.",
-      "weight": 1.0
+      "weight": 1.0,
+      "coffees": [
+        "black",
+        "cappuccino",
+        "espresso"
+      ]
     },
     {
       "id": "office_36",
       "text": "An action item that can actually be swallowed.",
-      "weight": 1.0
+      "weight": 1.0,
+      "coffees": [
+        "black",
+        "cappuccino",
+        "espresso"
+      ]
     },
     {
       "id": "office_37",
       "text": "A brief demonstration that specifications can be followed.",
-      "weight": 1.0
+      "weight": 1.0,
+      "coffees": [
+        "black",
+        "cappuccino",
+        "espresso"
+      ]
     },
     {
       "id": "office_38",
       "text": "The mug is full. The strategy is still a little thin.",
-      "weight": 1.0
+      "weight": 1.0,
+      "coffees": [
+        "black",
+        "cappuccino",
+        "espresso"
+      ]
     },
     {
       "id": "office_39",
       "text": "One task completed, if we are feeling generous about task definitions.",
-      "weight": 1.0
+      "weight": 1.0,
+      "coffees": [
+        "black",
+        "cappuccino",
+        "espresso"
+      ]
     },
     {
       "id": "office_40",
       "text": "Your keyboard has been granted a very brief ceasefire.",
-      "weight": 1.0
+      "weight": 1.0,
+      "coffees": [
+        "black",
+        "cappuccino",
+        "espresso"
+      ]
     },
     {
       "id": "office_41",
       "text": "Someone has finally found a use for the office water supply.",
-      "weight": 1.0
+      "weight": 1.0,
+      "coffees": [
+        "black",
+        "cappuccino",
+        "espresso"
+      ]
     },
     {
       "id": "office_42",
       "text": "A reminder that some status updates are worth standing up for.",
-      "weight": 1.0
+      "weight": 1.0,
+      "coffees": [
+        "black",
+        "cappuccino",
+        "espresso"
+      ]
     },
     {
       "id": "office_43",
       "text": "The machine has delivered. Please resist asking it for a slide deck.",
-      "weight": 1.0
+      "weight": 1.0,
+      "coffees": [
+        "black",
+        "cappuccino",
+        "espresso"
+      ]
     },
     {
       "id": "office_44",
       "text": "The only hot take in this office that comes with a handle.",
-      "weight": 1.0
+      "weight": 1.0,
+      "coffees": [
+        "black",
+        "cappuccino",
+        "espresso"
+      ]
     },
     {
       "id": "office_45",
       "text": "We now return to our regularly scheduled optimistic estimates.",
-      "weight": 1.0
+      "weight": 1.0,
+      "coffees": [
+        "black",
+        "cappuccino",
+        "espresso"
+      ]
     },
     {
       "id": "office_46",
       "text": "A cup-sized rebuttal to the phrase just push through.",
-      "weight": 1.0
+      "weight": 1.0,
+      "coffees": [
+        "black",
+        "cappuccino",
+        "espresso"
+      ]
     },
     {
       "id": "office_47",
       "text": "Another round of strategic mug holding has been authorized.",
-      "weight": 1.0
+      "weight": 1.0,
+      "coffees": [
+        "black",
+        "cappuccino",
+        "espresso"
+      ]
     },
     {
       "id": "office_48",
       "text": "The break room has achieved another quarterly objective.",
-      "weight": 1.0
+      "weight": 1.0,
+      "coffees": [
+        "black",
+        "cappuccino",
+        "espresso"
+      ]
     },
     {
       "id": "office_49",
       "text": "Consider this a very small, very drinkable contingency plan.",
-      "weight": 1.0
+      "weight": 1.0,
+      "coffees": [
+        "black",
+        "cappuccino",
+        "espresso"
+      ]
     },
     {
       "id": "office_50",
       "text": "This purchase has been approved by the department of needing a minute.",
-      "weight": 1.0
+      "weight": 1.0,
+      "coffees": [
+        "black",
+        "cappuccino",
+        "espresso"
+      ]
     },
     {
       "id": "office_51",
       "text": "The office has produced one tangible result. Please form a queue.",
-      "weight": 1.0
+      "weight": 1.0,
+      "coffees": [
+        "black",
+        "cappuccino",
+        "espresso"
+      ]
     },
     {
       "id": "office_52",
       "text": "A mug is just a progress bar that needs refilling.",
-      "weight": 1.0
+      "weight": 1.0,
+      "coffees": [
+        "black",
+        "cappuccino",
+        "espresso"
+      ]
     },
     {
       "id": "office_53",
       "text": "A temporary solution with excellent repeat business.",
-      "weight": 1.0
+      "weight": 1.0,
+      "coffees": [
+        "black",
+        "cappuccino",
+        "espresso"
+      ]
     },
     {
       "id": "office_54",
       "text": "Somewhere, an unread email is quietly losing priority.",
-      "weight": 1.0
+      "weight": 1.0,
+      "coffees": [
+        "black",
+        "cappuccino",
+        "espresso"
+      ]
     },
     {
       "id": "office_55",
       "text": "The coffee machine remains undefeated at understanding the assignment.",
-      "weight": 1.0
+      "weight": 1.0,
+      "coffees": [
+        "black",
+        "cappuccino",
+        "espresso"
+      ]
     },
     {
       "id": "office_56",
       "text": "Good news. This dependency has resolved itself.",
-      "weight": 1.0
+      "weight": 1.0,
+      "coffees": [
+        "black",
+        "cappuccino",
+        "espresso"
+      ]
     },
     {
       "id": "office_57",
       "text": "Please enjoy this brief period of having exactly one clear objective.",
-      "weight": 1.0
+      "weight": 1.0,
+      "coffees": [
+        "black",
+        "cappuccino",
+        "espresso"
+      ]
     },
     {
       "id": "office_58",
       "text": "A break so well justified it no longer needs a justification.",
-      "weight": 1.0
+      "weight": 1.0,
+      "coffees": [
+        "black",
+        "cappuccino",
+        "espresso"
+      ]
     },
     {
       "id": "office_59",
       "text": "We have reached the drinkable portion of the workflow.",
-      "weight": 1.0
+      "weight": 1.0,
+      "coffees": [
+        "black",
+        "cappuccino",
+        "espresso"
+      ]
     },
     {
       "id": "office_60",
       "text": "The machine requests that all applause be directed toward the beans.",
-      "weight": 1.0
+      "weight": 1.0,
+      "coffees": [
+        "black",
+        "cappuccino",
+        "espresso"
+      ]
     },
     {
       "id": "black_01",
@@ -1371,6 +1810,11 @@
       "id": "early_01",
       "text": "Even the coffee machine thinks this is a bit much.",
       "weight": 2.0,
+      "coffees": [
+        "black",
+        "cappuccino",
+        "espresso"
+      ],
       "periods": [
         "early"
       ]
@@ -1379,6 +1823,11 @@
       "id": "early_02",
       "text": "The sun has not clocked in. Expectations seem high.",
       "weight": 2.0,
+      "coffees": [
+        "black",
+        "cappuccino",
+        "espresso"
+      ],
       "periods": [
         "early"
       ]
@@ -1387,6 +1836,11 @@
       "id": "early_03",
       "text": "An impressive commitment to being awake against our better judgment.",
       "weight": 2.0,
+      "coffees": [
+        "black",
+        "cappuccino",
+        "espresso"
+      ],
       "periods": [
         "early"
       ]
@@ -1395,6 +1849,11 @@
       "id": "early_04",
       "text": "Apparently the day needed a prequel.",
       "weight": 2.0,
+      "coffees": [
+        "black",
+        "cappuccino",
+        "espresso"
+      ],
       "periods": [
         "early"
       ]
@@ -1403,6 +1862,11 @@
       "id": "early_05",
       "text": "The office plants are still asleep. Sensible of them.",
       "weight": 2.0,
+      "coffees": [
+        "black",
+        "cappuccino",
+        "espresso"
+      ],
       "periods": [
         "early"
       ]
@@ -1411,6 +1875,11 @@
       "id": "early_06",
       "text": "The building is technically open to the idea of being awake.",
       "weight": 2.0,
+      "coffees": [
+        "black",
+        "cappuccino",
+        "espresso"
+      ],
       "periods": [
         "early"
       ]
@@ -1419,6 +1888,11 @@
       "id": "early_07",
       "text": "An opening act for a day that has not arrived yet.",
       "weight": 2.0,
+      "coffees": [
+        "black",
+        "cappuccino",
+        "espresso"
+      ],
       "periods": [
         "early"
       ]
@@ -1427,6 +1901,11 @@
       "id": "early_08",
       "text": "The alarm clock would like to apologize for its involvement.",
       "weight": 2.0,
+      "coffees": [
+        "black",
+        "cappuccino",
+        "espresso"
+      ],
       "periods": [
         "early"
       ]
@@ -1435,6 +1914,11 @@
       "id": "early_09",
       "text": "A brave entry in the category of unnecessarily early decisions.",
       "weight": 2.0,
+      "coffees": [
+        "black",
+        "cappuccino",
+        "espresso"
+      ],
       "periods": [
         "early"
       ]
@@ -1443,6 +1927,11 @@
       "id": "early_10",
       "text": "Even the inbox looks surprised to see anyone.",
       "weight": 2.0,
+      "coffees": [
+        "black",
+        "cappuccino",
+        "espresso"
+      ],
       "periods": [
         "early"
       ]
@@ -1451,6 +1940,11 @@
       "id": "early_11",
       "text": "The morning shift appears to have started without the morning.",
       "weight": 2.0,
+      "coffees": [
+        "black",
+        "cappuccino",
+        "espresso"
+      ],
       "periods": [
         "early"
       ]
@@ -1459,6 +1953,11 @@
       "id": "early_12",
       "text": "A head start on wishing it were later.",
       "weight": 2.0,
+      "coffees": [
+        "black",
+        "cappuccino",
+        "espresso"
+      ],
       "periods": [
         "early"
       ]
@@ -1467,6 +1966,11 @@
       "id": "early_13",
       "text": "The silence is free. The coffee is an additional commitment.",
       "weight": 2.0,
+      "coffees": [
+        "black",
+        "cappuccino",
+        "espresso"
+      ],
       "periods": [
         "early"
       ]
@@ -1475,6 +1979,11 @@
       "id": "early_14",
       "text": "Someone has mistaken the loading screen for the start of the day.",
       "weight": 2.0,
+      "coffees": [
+        "black",
+        "cappuccino",
+        "espresso"
+      ],
       "periods": [
         "early"
       ]
@@ -1483,6 +1992,11 @@
       "id": "early_15",
       "text": "The office lights are still negotiating their working conditions.",
       "weight": 2.0,
+      "coffees": [
+        "black",
+        "cappuccino",
+        "espresso"
+      ],
       "periods": [
         "early"
       ]
@@ -1491,6 +2005,11 @@
       "id": "morning_01",
       "text": "The official start of pretending to be a morning person.",
       "weight": 2.0,
+      "coffees": [
+        "black",
+        "cappuccino",
+        "espresso"
+      ],
       "periods": [
         "morning"
       ]
@@ -1499,6 +2018,11 @@
       "id": "morning_02",
       "text": "Breakfast for the part of the day that has deadlines.",
       "weight": 2.0,
+      "coffees": [
+        "black",
+        "cappuccino",
+        "espresso"
+      ],
       "periods": [
         "morning"
       ]
@@ -1507,6 +2031,11 @@
       "id": "morning_03",
       "text": "A warm-up for opening the inbox and immediately regretting it.",
       "weight": 2.0,
+      "coffees": [
+        "black",
+        "cappuccino",
+        "espresso"
+      ],
       "periods": [
         "morning"
       ]
@@ -1515,6 +2044,11 @@
       "id": "morning_04",
       "text": "The first item on the to-do list that stood a chance.",
       "weight": 2.0,
+      "coffees": [
+        "black",
+        "cappuccino",
+        "espresso"
+      ],
       "periods": [
         "morning"
       ]
@@ -1523,6 +2057,11 @@
       "id": "morning_05",
       "text": "Optimism, before the calendar has its say.",
       "weight": 2.0,
+      "coffees": [
+        "black",
+        "cappuccino",
+        "espresso"
+      ],
       "periods": [
         "morning"
       ]
@@ -1531,6 +2070,11 @@
       "id": "morning_06",
       "text": "The day has barely started and already requires a beverage strategy.",
       "weight": 2.0,
+      "coffees": [
+        "black",
+        "cappuccino",
+        "espresso"
+      ],
       "periods": [
         "morning"
       ]
@@ -1539,6 +2083,11 @@
       "id": "morning_07",
       "text": "The first meeting is still approaching. Enjoy these final peaceful sips.",
       "weight": 2.0,
+      "coffees": [
+        "black",
+        "cappuccino",
+        "espresso"
+      ],
       "periods": [
         "morning"
       ]
@@ -1547,6 +2096,11 @@
       "id": "morning_08",
       "text": "A small investment in looking like the login password was remembered.",
       "weight": 2.0,
+      "coffees": [
+        "black",
+        "cappuccino",
+        "espresso"
+      ],
       "periods": [
         "morning"
       ]
@@ -1555,6 +2109,11 @@
       "id": "morning_09",
       "text": "The morning routine has reached its most defensible stage.",
       "weight": 2.0,
+      "coffees": [
+        "black",
+        "cappuccino",
+        "espresso"
+      ],
       "periods": [
         "morning"
       ]
@@ -1563,6 +2122,11 @@
       "id": "morning_10",
       "text": "The inbox has been opened. Negotiations have begun.",
       "weight": 2.0,
+      "coffees": [
+        "black",
+        "cappuccino",
+        "espresso"
+      ],
       "periods": [
         "morning"
       ]
@@ -1571,6 +2135,11 @@
       "id": "morning_11",
       "text": "A coffee-shaped attempt to improve the opening scene.",
       "weight": 2.0,
+      "coffees": [
+        "black",
+        "cappuccino",
+        "espresso"
+      ],
       "periods": [
         "morning"
       ]
@@ -1579,6 +2148,11 @@
       "id": "morning_12",
       "text": "The day is young. The excuses are already well developed.",
       "weight": 2.0,
+      "coffees": [
+        "black",
+        "cappuccino",
+        "espresso"
+      ],
       "periods": [
         "morning"
       ]
@@ -1587,6 +2161,11 @@
       "id": "morning_13",
       "text": "A warm welcome to whatever happened in the inbox overnight.",
       "weight": 2.0,
+      "coffees": [
+        "black",
+        "cappuccino",
+        "espresso"
+      ],
       "periods": [
         "morning"
       ]
@@ -1595,6 +2174,11 @@
       "id": "morning_14",
       "text": "The first deadline today is becoming convincingly awake.",
       "weight": 2.0,
+      "coffees": [
+        "black",
+        "cappuccino",
+        "espresso"
+      ],
       "periods": [
         "morning"
       ]
@@ -1603,6 +2187,11 @@
       "id": "morning_15",
       "text": "The morning has requested a little more enthusiasm than was available.",
       "weight": 2.0,
+      "coffees": [
+        "black",
+        "cappuccino",
+        "espresso"
+      ],
       "periods": [
         "morning"
       ]
@@ -1611,6 +2200,11 @@
       "id": "midday_01",
       "text": "A perfectly respectable way to postpone lunch decisions.",
       "weight": 2.0,
+      "coffees": [
+        "black",
+        "cappuccino",
+        "espresso"
+      ],
       "periods": [
         "midday"
       ]
@@ -1619,6 +2213,11 @@
       "id": "midday_02",
       "text": "The morning has submitted its resignation.",
       "weight": 2.0,
+      "coffees": [
+        "black",
+        "cappuccino",
+        "espresso"
+      ],
       "periods": [
         "midday"
       ]
@@ -1627,6 +2226,11 @@
       "id": "midday_03",
       "text": "Halfway to lunch. Already negotiating terms.",
       "weight": 2.0,
+      "coffees": [
+        "black",
+        "cappuccino",
+        "espresso"
+      ],
       "periods": [
         "midday"
       ]
@@ -1635,6 +2239,11 @@
       "id": "midday_04",
       "text": "The second half of the morning requires additional paperwork.",
       "weight": 2.0,
+      "coffees": [
+        "black",
+        "cappuccino",
+        "espresso"
+      ],
       "periods": [
         "midday"
       ]
@@ -1643,6 +2252,11 @@
       "id": "midday_05",
       "text": "A brief intermission in the ongoing production of looking busy.",
       "weight": 2.0,
+      "coffees": [
+        "black",
+        "cappuccino",
+        "espresso"
+      ],
       "periods": [
         "midday"
       ]
@@ -1651,6 +2265,11 @@
       "id": "midday_06",
       "text": "A holding pattern until someone decides where lunch is happening.",
       "weight": 2.0,
+      "coffees": [
+        "black",
+        "cappuccino",
+        "espresso"
+      ],
       "periods": [
         "midday"
       ]
@@ -1659,6 +2278,11 @@
       "id": "midday_07",
       "text": "The lunch break has competition for the most anticipated event.",
       "weight": 2.0,
+      "coffees": [
+        "black",
+        "cappuccino",
+        "espresso"
+      ],
       "periods": [
         "midday"
       ]
@@ -1667,6 +2291,11 @@
       "id": "midday_08",
       "text": "A liquid placeholder for a proper lunch plan.",
       "weight": 2.0,
+      "coffees": [
+        "black",
+        "cappuccino",
+        "espresso"
+      ],
       "periods": [
         "midday"
       ]
@@ -1675,6 +2304,11 @@
       "id": "midday_09",
       "text": "The day has reached the part where snacks become a strategy.",
       "weight": 2.0,
+      "coffees": [
+        "black",
+        "cappuccino",
+        "espresso"
+      ],
       "periods": [
         "midday"
       ]
@@ -1683,6 +2317,11 @@
       "id": "midday_10",
       "text": "The morning estimate is currently being revised over a cup.",
       "weight": 2.0,
+      "coffees": [
+        "black",
+        "cappuccino",
+        "espresso"
+      ],
       "periods": [
         "midday"
       ]
@@ -1691,6 +2330,11 @@
       "id": "midday_11",
       "text": "A perfectly timed detour around one more quick question.",
       "weight": 2.0,
+      "coffees": [
+        "black",
+        "cappuccino",
+        "espresso"
+      ],
       "periods": [
         "midday"
       ]
@@ -1699,6 +2343,11 @@
       "id": "midday_12",
       "text": "Lunch remains under discussion. The coffee has taken decisive action.",
       "weight": 2.0,
+      "coffees": [
+        "black",
+        "cappuccino",
+        "espresso"
+      ],
       "periods": [
         "midday"
       ]
@@ -1707,6 +2356,11 @@
       "id": "midday_13",
       "text": "The schedule is full. Fortunately, so is the mug.",
       "weight": 2.0,
+      "coffees": [
+        "black",
+        "cappuccino",
+        "espresso"
+      ],
       "periods": [
         "midday"
       ]
@@ -1715,6 +2369,11 @@
       "id": "midday_14",
       "text": "A pause between the morning promises and the afternoon explanations.",
       "weight": 2.0,
+      "coffees": [
+        "black",
+        "cappuccino",
+        "espresso"
+      ],
       "periods": [
         "midday"
       ]
@@ -1723,6 +2382,11 @@
       "id": "midday_15",
       "text": "The coffee machine has won the vote on what to do next.",
       "weight": 2.0,
+      "coffees": [
+        "black",
+        "cappuccino",
+        "espresso"
+      ],
       "periods": [
         "midday"
       ]
@@ -1731,6 +2395,11 @@
       "id": "afternoon_01",
       "text": "The afternoon slump has requested a meeting.",
       "weight": 2.0,
+      "coffees": [
+        "black",
+        "cappuccino",
+        "espresso"
+      ],
       "periods": [
         "afternoon"
       ]
@@ -1739,6 +2408,11 @@
       "id": "afternoon_02",
       "text": "Lunch has left the chat. Motivation never joined.",
       "weight": 2.0,
+      "coffees": [
+        "black",
+        "cappuccino",
+        "espresso"
+      ],
       "periods": [
         "afternoon"
       ]
@@ -1747,6 +2421,11 @@
       "id": "afternoon_03",
       "text": "A small appeal against the verdict of the afternoon.",
       "weight": 2.0,
+      "coffees": [
+        "black",
+        "cappuccino",
+        "espresso"
+      ],
       "periods": [
         "afternoon"
       ]
@@ -1755,6 +2434,11 @@
       "id": "afternoon_04",
       "text": "The day is now running on extensions and good intentions.",
       "weight": 2.0,
+      "coffees": [
+        "black",
+        "cappuccino",
+        "espresso"
+      ],
       "periods": [
         "afternoon"
       ]
@@ -1763,6 +2447,11 @@
       "id": "afternoon_05",
       "text": "Another attempt to turn the last meeting into a productive one.",
       "weight": 2.0,
+      "coffees": [
+        "black",
+        "cappuccino",
+        "espresso"
+      ],
       "periods": [
         "afternoon"
       ]
@@ -1771,6 +2460,11 @@
       "id": "afternoon_06",
       "text": "Bold strategy for someone who enjoys sleeping.",
       "weight": 2.0,
+      "coffees": [
+        "black",
+        "cappuccino",
+        "espresso"
+      ],
       "periods": [
         "afternoon"
       ]
@@ -1779,6 +2473,11 @@
       "id": "afternoon_07",
       "text": "The afternoon has been placed on a performance improvement plan.",
       "weight": 2.0,
+      "coffees": [
+        "black",
+        "cappuccino",
+        "espresso"
+      ],
       "periods": [
         "afternoon"
       ]
@@ -1787,6 +2486,11 @@
       "id": "afternoon_08",
       "text": "An appeal for extra time from a day that has already used its budget.",
       "weight": 2.0,
+      "coffees": [
+        "black",
+        "cappuccino",
+        "espresso"
+      ],
       "periods": [
         "afternoon"
       ]
@@ -1795,6 +2499,11 @@
       "id": "afternoon_09",
       "text": "The lunch break is over. The lunch-break mindset has refused to leave.",
       "weight": 2.0,
+      "coffees": [
+        "black",
+        "cappuccino",
+        "espresso"
+      ],
       "periods": [
         "afternoon"
       ]
@@ -1803,6 +2512,11 @@
       "id": "afternoon_10",
       "text": "A cup-sized proposal to renegotiate the rest of the day.",
       "weight": 2.0,
+      "coffees": [
+        "black",
+        "cappuccino",
+        "espresso"
+      ],
       "periods": [
         "afternoon"
       ]
@@ -1811,6 +2525,11 @@
       "id": "afternoon_11",
       "text": "The task list remains optimistic about the hours remaining.",
       "weight": 2.0,
+      "coffees": [
+        "black",
+        "cappuccino",
+        "espresso"
+      ],
       "periods": [
         "afternoon"
       ]
@@ -1819,6 +2538,11 @@
       "id": "afternoon_12",
       "text": "Someone is trying to reboot the part of the day after lunch.",
       "weight": 2.0,
+      "coffees": [
+        "black",
+        "cappuccino",
+        "espresso"
+      ],
       "periods": [
         "afternoon"
       ]
@@ -1827,6 +2551,11 @@
       "id": "afternoon_13",
       "text": "A refresh button for a day that keeps showing the same page.",
       "weight": 2.0,
+      "coffees": [
+        "black",
+        "cappuccino",
+        "espresso"
+      ],
       "periods": [
         "afternoon"
       ]
@@ -1835,6 +2564,11 @@
       "id": "afternoon_14",
       "text": "The afternoon requested fresh ideas. It received another cup.",
       "weight": 2.0,
+      "coffees": [
+        "black",
+        "cappuccino",
+        "espresso"
+      ],
       "periods": [
         "afternoon"
       ]
@@ -1843,6 +2577,11 @@
       "id": "afternoon_15",
       "text": "The remaining calendar invites have been served notice.",
       "weight": 2.0,
+      "coffees": [
+        "black",
+        "cappuccino",
+        "espresso"
+      ],
       "periods": [
         "afternoon"
       ]
@@ -1851,6 +2590,11 @@
       "id": "evening_01",
       "text": "The office is closing. The plot is apparently thickening.",
       "weight": 2.0,
+      "coffees": [
+        "black",
+        "cappuccino",
+        "espresso"
+      ],
       "periods": [
         "evening"
       ]
@@ -1859,6 +2603,11 @@
       "id": "evening_02",
       "text": "A bold interpretation of winding down.",
       "weight": 2.0,
+      "coffees": [
+        "black",
+        "cappuccino",
+        "espresso"
+      ],
       "periods": [
         "evening"
       ]
@@ -1867,6 +2616,11 @@
       "id": "evening_03",
       "text": "The calendar says after hours. The mug has other plans.",
       "weight": 2.0,
+      "coffees": [
+        "black",
+        "cappuccino",
+        "espresso"
+      ],
       "periods": [
         "evening"
       ]
@@ -1875,6 +2629,11 @@
       "id": "evening_04",
       "text": "Apparently going home needed a side quest.",
       "weight": 2.0,
+      "coffees": [
+        "black",
+        "cappuccino",
+        "espresso"
+      ],
       "periods": [
         "evening"
       ]
@@ -1883,6 +2642,11 @@
       "id": "evening_05",
       "text": "The day has asked for a sequel. Nobody approved the budget.",
       "weight": 2.0,
+      "coffees": [
+        "black",
+        "cappuccino",
+        "espresso"
+      ],
       "periods": [
         "evening"
       ]
@@ -1891,6 +2655,11 @@
       "id": "evening_06",
       "text": "Bedtime has been moved to the backlog.",
       "weight": 2.0,
+      "coffees": [
+        "black",
+        "cappuccino",
+        "espresso"
+      ],
       "periods": [
         "evening"
       ]
@@ -1899,6 +2668,11 @@
       "id": "evening_07",
       "text": "Tomorrow would like a word about this decision.",
       "weight": 2.0,
+      "coffees": [
+        "black",
+        "cappuccino",
+        "espresso"
+      ],
       "periods": [
         "evening"
       ]
@@ -1907,6 +2681,11 @@
       "id": "evening_08",
       "text": "An excellent way to give tonight a surprise agenda.",
       "weight": 2.0,
+      "coffees": [
+        "black",
+        "cappuccino",
+        "espresso"
+      ],
       "periods": [
         "evening"
       ]
@@ -1915,6 +2694,11 @@
       "id": "evening_09",
       "text": "The out-of-office reply is being held hostage by a mug.",
       "weight": 2.0,
+      "coffees": [
+        "black",
+        "cappuccino",
+        "espresso"
+      ],
       "periods": [
         "evening"
       ]
@@ -1923,6 +2707,11 @@
       "id": "evening_10",
       "text": "A beverage for the encore nobody scheduled.",
       "weight": 2.0,
+      "coffees": [
+        "black",
+        "cappuccino",
+        "espresso"
+      ],
       "periods": [
         "evening"
       ]
@@ -1931,6 +2720,11 @@
       "id": "evening_11",
       "text": "The office chair was hoping this relationship had office hours.",
       "weight": 2.0,
+      "coffees": [
+        "black",
+        "cappuccino",
+        "espresso"
+      ],
       "periods": [
         "evening"
       ]
@@ -1939,6 +2733,11 @@
       "id": "evening_12",
       "text": "The working day has discovered the phrase just one more thing.",
       "weight": 2.0,
+      "coffees": [
+        "black",
+        "cappuccino",
+        "espresso"
+      ],
       "periods": [
         "evening"
       ]
@@ -1947,6 +2746,11 @@
       "id": "evening_13",
       "text": "Closing time appears to be more of a suggestion.",
       "weight": 2.0,
+      "coffees": [
+        "black",
+        "cappuccino",
+        "espresso"
+      ],
       "periods": [
         "evening"
       ]
@@ -1955,6 +2759,11 @@
       "id": "evening_14",
       "text": "A final cup, according to a source with a poor track record.",
       "weight": 2.0,
+      "coffees": [
+        "black",
+        "cappuccino",
+        "espresso"
+      ],
       "periods": [
         "evening"
       ]
@@ -1963,6 +2772,11 @@
       "id": "evening_15",
       "text": "The coffee machine has reluctantly accepted another calendar invite.",
       "weight": 2.0,
+      "coffees": [
+        "black",
+        "cappuccino",
+        "espresso"
+      ],
       "periods": [
         "evening"
       ]
@@ -2457,6 +3271,1026 @@
       "weight": 4.0,
       "coffees": [
         "espresso"
+      ],
+      "periods": [
+        "evening"
+      ]
+    },
+    {
+      "id": "other_01",
+      "text": "The classifier has selected the scientific category of absolutely no idea.",
+      "weight": 1.0,
+      "coffees": [
+        "other"
+      ]
+    },
+    {
+      "id": "other_02",
+      "text": "The vibration sensor has detected a strongly worded shrug.",
+      "weight": 1.0,
+      "coffees": [
+        "other"
+      ]
+    },
+    {
+      "id": "other_03",
+      "text": "Three coffee classes, and the machine has chosen jazz.",
+      "weight": 1.0,
+      "coffees": [
+        "other"
+      ]
+    },
+    {
+      "id": "other_04",
+      "text": "The model would like to use a lifeline.",
+      "weight": 1.0,
+      "coffees": [
+        "other"
+      ]
+    },
+    {
+      "id": "other_05",
+      "text": "Sensor report: vibes. Scientific precision: pending.",
+      "weight": 1.0,
+      "coffees": [
+        "other"
+      ]
+    },
+    {
+      "id": "other_06",
+      "text": "The training data would like to be excluded from this conversation.",
+      "weight": 1.0,
+      "coffees": [
+        "other"
+      ]
+    },
+    {
+      "id": "other_07",
+      "text": "The machine has submitted a pattern in a font the model cannot read.",
+      "weight": 1.0,
+      "coffees": [
+        "other"
+      ]
+    },
+    {
+      "id": "other_08",
+      "text": "Confidence level: a pigeon operating a spreadsheet.",
+      "weight": 1.0,
+      "coffees": [
+        "other"
+      ]
+    },
+    {
+      "id": "other_09",
+      "text": "The sensor heard something. Understanding was an optional extra.",
+      "weight": 1.0,
+      "coffees": [
+        "other"
+      ]
+    },
+    {
+      "id": "other_10",
+      "text": "The classifier has quietly changed its answer to ask someone else.",
+      "weight": 1.0,
+      "coffees": [
+        "other"
+      ]
+    },
+    {
+      "id": "other_11",
+      "text": "An excellent contribution to the growing field of machine confusion.",
+      "weight": 1.0,
+      "coffees": [
+        "other"
+      ]
+    },
+    {
+      "id": "other_12",
+      "text": "The vibration pattern has declined to fit inside the spreadsheet.",
+      "weight": 1.0,
+      "coffees": [
+        "other"
+      ]
+    },
+    {
+      "id": "other_13",
+      "text": "The machine is exploring a career outside supervised learning.",
+      "weight": 1.0,
+      "coffees": [
+        "other"
+      ]
+    },
+    {
+      "id": "other_14",
+      "text": "The algorithm has encountered free-form expression and requested a chair.",
+      "weight": 1.0,
+      "coffees": [
+        "other"
+      ]
+    },
+    {
+      "id": "other_15",
+      "text": "The sensor has filed this under interpretive dance.",
+      "weight": 1.0,
+      "coffees": [
+        "other"
+      ]
+    },
+    {
+      "id": "other_16",
+      "text": "A waveform has arrived without the appropriate paperwork.",
+      "weight": 1.0,
+      "coffees": [
+        "other"
+      ]
+    },
+    {
+      "id": "other_17",
+      "text": "The machine has discovered a fourth option on a three-option test.",
+      "weight": 1.0,
+      "coffees": [
+        "other"
+      ]
+    },
+    {
+      "id": "other_18",
+      "text": "The model has left the answer blank for partial credit.",
+      "weight": 1.0,
+      "coffees": [
+        "other"
+      ]
+    },
+    {
+      "id": "other_19",
+      "text": "The vibration signature appears to have been written by a distracted octopus.",
+      "weight": 1.0,
+      "coffees": [
+        "other"
+      ]
+    },
+    {
+      "id": "other_20",
+      "text": "The classifier has outsourced this one to philosophy.",
+      "weight": 1.0,
+      "coffees": [
+        "other"
+      ]
+    },
+    {
+      "id": "other_21",
+      "text": "Could be a cleaning cycle. Could be a seance with excellent plumbing.",
+      "weight": 1.0,
+      "coffees": [
+        "other"
+      ]
+    },
+    {
+      "id": "other_22",
+      "text": "Possibly descaling. Possibly an exorcism with a maintenance budget.",
+      "weight": 1.0,
+      "coffees": [
+        "other"
+      ]
+    },
+    {
+      "id": "other_23",
+      "text": "Either routine servicing or the opening act of a very small haunting.",
+      "weight": 1.0,
+      "coffees": [
+        "other"
+      ]
+    },
+    {
+      "id": "other_24",
+      "text": "Perhaps the machine is cleaning itself. Perhaps it is deleting evidence.",
+      "weight": 1.0,
+      "coffees": [
+        "other"
+      ]
+    },
+    {
+      "id": "other_25",
+      "text": "Maintenance, modern dance, or a strongly expressed need for attention.",
+      "weight": 1.0,
+      "coffees": [
+        "other"
+      ]
+    },
+    {
+      "id": "other_26",
+      "text": "Could be a rinse. Could be the machine washing its hands of this office.",
+      "weight": 1.0,
+      "coffees": [
+        "other"
+      ]
+    },
+    {
+      "id": "other_27",
+      "text": "A possible spa day for an appliance with a stressful public-facing role.",
+      "weight": 1.0,
+      "coffees": [
+        "other"
+      ]
+    },
+    {
+      "id": "other_28",
+      "text": "Someone may be servicing it. The machine has requested a second opinion.",
+      "weight": 1.0,
+      "coffees": [
+        "other"
+      ]
+    },
+    {
+      "id": "other_29",
+      "text": "The machine might be descaling its opinions of the workplace.",
+      "weight": 1.0,
+      "coffees": [
+        "other"
+      ]
+    },
+    {
+      "id": "other_30",
+      "text": "Cleaning cycle or existential crisis. The sensor is remaining neutral.",
+      "weight": 1.0,
+      "coffees": [
+        "other"
+      ]
+    },
+    {
+      "id": "other_31",
+      "text": "Perhaps a service engineer is involved. Perhaps a wizard with a screwdriver.",
+      "weight": 1.0,
+      "coffees": [
+        "other"
+      ]
+    },
+    {
+      "id": "other_32",
+      "text": "Could be routine maintenance. The theatrical delivery is a personal choice.",
+      "weight": 1.0,
+      "coffees": [
+        "other"
+      ]
+    },
+    {
+      "id": "other_33",
+      "text": "Possible cleaning activity. Even the machine deserves a fresh start.",
+      "weight": 1.0,
+      "coffees": [
+        "other"
+      ]
+    },
+    {
+      "id": "other_34",
+      "text": "A rinse cycle would explain this. So would a very organized poltergeist.",
+      "weight": 1.0,
+      "coffees": [
+        "other"
+      ]
+    },
+    {
+      "id": "other_35",
+      "text": "The appliance may be undergoing scheduled character development.",
+      "weight": 1.0,
+      "coffees": [
+        "other"
+      ]
+    },
+    {
+      "id": "other_36",
+      "text": "Servicing, descaling, or auditioning for a role in a submarine.",
+      "weight": 1.0,
+      "coffees": [
+        "other"
+      ]
+    },
+    {
+      "id": "other_37",
+      "text": "This could be preventive maintenance. The suspense is apparently included.",
+      "weight": 1.0,
+      "coffees": [
+        "other"
+      ]
+    },
+    {
+      "id": "other_38",
+      "text": "Possibly a diagnostic cycle. Possibly the machine diagnosing the office.",
+      "weight": 1.0,
+      "coffees": [
+        "other"
+      ]
+    },
+    {
+      "id": "other_39",
+      "text": "It may be cleaning itself. Bold of it to expect the rest of us to follow.",
+      "weight": 1.0,
+      "coffees": [
+        "other"
+      ]
+    },
+    {
+      "id": "other_40",
+      "text": "Could be a test run. The machine seems committed to making it a mystery.",
+      "weight": 1.0,
+      "coffees": [
+        "other"
+      ]
+    },
+    {
+      "id": "other_41",
+      "text": "The machine may have briefly paired with a neighboring dimension.",
+      "weight": 1.0,
+      "coffees": [
+        "other"
+      ]
+    },
+    {
+      "id": "other_42",
+      "text": "Either a sensor anomaly or the tiniest alien landing in company history.",
+      "weight": 1.0,
+      "coffees": [
+        "other"
+      ]
+    },
+    {
+      "id": "other_43",
+      "text": "The office poltergeist appears to have found the control panel.",
+      "weight": 1.0,
+      "coffees": [
+        "other"
+      ]
+    },
+    {
+      "id": "other_44",
+      "text": "A small disturbance in the force, with unusually practical plumbing.",
+      "weight": 1.0,
+      "coffees": [
+        "other"
+      ]
+    },
+    {
+      "id": "other_45",
+      "text": "The machine might be receiving firmware from an alternate universe.",
+      "weight": 1.0,
+      "coffees": [
+        "other"
+      ]
+    },
+    {
+      "id": "other_46",
+      "text": "The portal to the break-room dimension appears to be buffering.",
+      "weight": 1.0,
+      "coffees": [
+        "other"
+      ]
+    },
+    {
+      "id": "other_47",
+      "text": "Possibly a ghost. Hopefully one with a current service certificate.",
+      "weight": 1.0,
+      "coffees": [
+        "other"
+      ]
+    },
+    {
+      "id": "other_48",
+      "text": "The mothership has apparently discovered our excellent office amenities.",
+      "weight": 1.0,
+      "coffees": [
+        "other"
+      ]
+    },
+    {
+      "id": "other_49",
+      "text": "A local anomaly has requested permission to use the kitchenette.",
+      "weight": 1.0,
+      "coffees": [
+        "other"
+      ]
+    },
+    {
+      "id": "other_50",
+      "text": "The machine may be negotiating with whatever lives behind the fridge.",
+      "weight": 1.0,
+      "coffees": [
+        "other"
+      ]
+    },
+    {
+      "id": "other_51",
+      "text": "The paranormal activity has at least stayed within the equipment budget.",
+      "weight": 1.0,
+      "coffees": [
+        "other"
+      ]
+    },
+    {
+      "id": "other_52",
+      "text": "If that was first contact, our welcome committee needs improvement.",
+      "weight": 1.0,
+      "coffees": [
+        "other"
+      ]
+    },
+    {
+      "id": "other_53",
+      "text": "A ghost in the machine would explain the lack of useful documentation.",
+      "weight": 1.0,
+      "coffees": [
+        "other"
+      ]
+    },
+    {
+      "id": "other_54",
+      "text": "The appliance appears to be trying to summon a smaller appliance.",
+      "weight": 1.0,
+      "coffees": [
+        "other"
+      ]
+    },
+    {
+      "id": "other_55",
+      "text": "Perhaps a wormhole opened. Perhaps someone pressed the unlabeled button.",
+      "weight": 1.0,
+      "coffees": [
+        "other"
+      ]
+    },
+    {
+      "id": "other_56",
+      "text": "The machine may have received an invitation from the shadow realm.",
+      "weight": 1.0,
+      "coffees": [
+        "other"
+      ]
+    },
+    {
+      "id": "other_57",
+      "text": "The universe has added a test case nobody asked for.",
+      "weight": 1.0,
+      "coffees": [
+        "other"
+      ]
+    },
+    {
+      "id": "other_58",
+      "text": "A temporal anomaly would explain why the maintenance manual feels ancient.",
+      "weight": 1.0,
+      "coffees": [
+        "other"
+      ]
+    },
+    {
+      "id": "other_59",
+      "text": "The machine seems to be communicating with a kettle in another timeline.",
+      "weight": 1.0,
+      "coffees": [
+        "other"
+      ]
+    },
+    {
+      "id": "other_60",
+      "text": "Our resident poltergeist may be attempting to clock in.",
+      "weight": 1.0,
+      "coffees": [
+        "other"
+      ]
+    },
+    {
+      "id": "other_61",
+      "text": "A possible alien transmission. Naturally, it arrived without a subject line.",
+      "weight": 1.0,
+      "coffees": [
+        "other"
+      ]
+    },
+    {
+      "id": "other_62",
+      "text": "The office goblin appears to have discovered experimental percussion.",
+      "weight": 1.0,
+      "coffees": [
+        "other"
+      ]
+    },
+    {
+      "id": "other_63",
+      "text": "Reality has submitted a change request through the wrong appliance.",
+      "weight": 1.0,
+      "coffees": [
+        "other"
+      ]
+    },
+    {
+      "id": "other_64",
+      "text": "A tiny cosmic event, conveniently located beside the mugs.",
+      "weight": 1.0,
+      "coffees": [
+        "other"
+      ]
+    },
+    {
+      "id": "other_65",
+      "text": "The machine may have briefly become self-aware and immediately regretted it.",
+      "weight": 1.0,
+      "coffees": [
+        "other"
+      ]
+    },
+    {
+      "id": "other_66",
+      "text": "Either the sensor is confused or the floor has developed an opinion.",
+      "weight": 1.0,
+      "coffees": [
+        "other"
+      ]
+    },
+    {
+      "id": "other_67",
+      "text": "The laws of physics have marked this event as tentatively accepted.",
+      "weight": 1.0,
+      "coffees": [
+        "other"
+      ]
+    },
+    {
+      "id": "other_68",
+      "text": "The machine might be haunted. At least someone is showing initiative.",
+      "weight": 1.0,
+      "coffees": [
+        "other"
+      ]
+    },
+    {
+      "id": "other_69",
+      "text": "Somewhere, a parallel-universe service engineer is equally confused.",
+      "weight": 1.0,
+      "coffees": [
+        "other"
+      ]
+    },
+    {
+      "id": "other_70",
+      "text": "The event horizon appears to be restricted to the drip-tray area.",
+      "weight": 1.0,
+      "coffees": [
+        "other"
+      ]
+    },
+    {
+      "id": "other_71",
+      "text": "The machine has entered its experimental music phase.",
+      "weight": 1.0,
+      "coffees": [
+        "other"
+      ]
+    },
+    {
+      "id": "other_72",
+      "text": "A strongly held mechanical opinion has been expressed.",
+      "weight": 1.0,
+      "coffees": [
+        "other"
+      ]
+    },
+    {
+      "id": "other_73",
+      "text": "The appliance has chosen performance art over clear communication.",
+      "weight": 1.0,
+      "coffees": [
+        "other"
+      ]
+    },
+    {
+      "id": "other_74",
+      "text": "This event has been escalated to the department of interesting noises.",
+      "weight": 1.0,
+      "coffees": [
+        "other"
+      ]
+    },
+    {
+      "id": "other_75",
+      "text": "The machine has made a point. Nobody is entirely sure which one.",
+      "weight": 1.0,
+      "coffees": [
+        "other"
+      ]
+    },
+    {
+      "id": "other_76",
+      "text": "An unscheduled percussion solo from the equipment corner.",
+      "weight": 1.0,
+      "coffees": [
+        "other"
+      ]
+    },
+    {
+      "id": "other_77",
+      "text": "The appliance has submitted feedback using the only language it knows.",
+      "weight": 1.0,
+      "coffees": [
+        "other"
+      ]
+    },
+    {
+      "id": "other_78",
+      "text": "The machine appears to be workshopping a new personality.",
+      "weight": 1.0,
+      "coffees": [
+        "other"
+      ]
+    },
+    {
+      "id": "other_79",
+      "text": "A mystery has been opened. Ownership is currently being avoided.",
+      "weight": 1.0,
+      "coffees": [
+        "other"
+      ]
+    },
+    {
+      "id": "other_80",
+      "text": "The equipment has declined to provide a meaningful status update.",
+      "weight": 1.0,
+      "coffees": [
+        "other"
+      ]
+    },
+    {
+      "id": "other_81",
+      "text": "The machine may be trying to shake itself out of a long-term commitment.",
+      "weight": 1.0,
+      "coffees": [
+        "other"
+      ]
+    },
+    {
+      "id": "other_82",
+      "text": "This looks like a job for someone with a clipboard and stronger opinions.",
+      "weight": 1.0,
+      "coffees": [
+        "other"
+      ]
+    },
+    {
+      "id": "other_83",
+      "text": "The appliance has discovered the power of being difficult to categorize.",
+      "weight": 1.0,
+      "coffees": [
+        "other"
+      ]
+    },
+    {
+      "id": "other_84",
+      "text": "The machine is apparently testing the limits of the word other.",
+      "weight": 1.0,
+      "coffees": [
+        "other"
+      ]
+    },
+    {
+      "id": "other_85",
+      "text": "A brief demonstration of why every dropdown needs an escape route.",
+      "weight": 1.0,
+      "coffees": [
+        "other"
+      ]
+    },
+    {
+      "id": "other_86",
+      "text": "The event has been successfully recorded as an event. Excellent work.",
+      "weight": 1.0,
+      "coffees": [
+        "other"
+      ]
+    },
+    {
+      "id": "other_87",
+      "text": "A noise happened, and now it has a project code.",
+      "weight": 1.0,
+      "coffees": [
+        "other"
+      ]
+    },
+    {
+      "id": "other_88",
+      "text": "The machine has requested that we respect its creative process.",
+      "weight": 1.0,
+      "coffees": [
+        "other"
+      ]
+    },
+    {
+      "id": "other_89",
+      "text": "The vibration pattern has been forwarded to the office jazz committee.",
+      "weight": 1.0,
+      "coffees": [
+        "other"
+      ]
+    },
+    {
+      "id": "other_90",
+      "text": "An appliance has expressed itself without consulting the style guide.",
+      "weight": 1.0,
+      "coffees": [
+        "other"
+      ]
+    },
+    {
+      "id": "other_91",
+      "text": "The machine appears to be practicing for its annual performance review.",
+      "weight": 1.0,
+      "coffees": [
+        "other"
+      ]
+    },
+    {
+      "id": "other_92",
+      "text": "That sounded expensive in a language the sensor does not speak.",
+      "weight": 1.0,
+      "coffees": [
+        "other"
+      ]
+    },
+    {
+      "id": "other_93",
+      "text": "The equipment has contributed a riddle to the daily stand-up.",
+      "weight": 1.0,
+      "coffees": [
+        "other"
+      ]
+    },
+    {
+      "id": "other_94",
+      "text": "The machine has successfully exceeded the scope of a simple dropdown.",
+      "weight": 1.0,
+      "coffees": [
+        "other"
+      ]
+    },
+    {
+      "id": "other_95",
+      "text": "A technical term for this exists. Unfortunately, it is what was that.",
+      "weight": 1.0,
+      "coffees": [
+        "other"
+      ]
+    },
+    {
+      "id": "other_96",
+      "text": "The appliance is maintaining plausible mechanical deniability.",
+      "weight": 1.0,
+      "coffees": [
+        "other"
+      ]
+    },
+    {
+      "id": "other_97",
+      "text": "The sensor and the machine are having a disagreement about genre.",
+      "weight": 1.0,
+      "coffees": [
+        "other"
+      ]
+    },
+    {
+      "id": "other_98",
+      "text": "An occurrence has occurred. Management considers that sufficient detail.",
+      "weight": 1.0,
+      "coffees": [
+        "other"
+      ]
+    },
+    {
+      "id": "other_99",
+      "text": "The machine has added a footnote to reality and refused to explain it.",
+      "weight": 1.0,
+      "coffees": [
+        "other"
+      ]
+    },
+    {
+      "id": "other_100",
+      "text": "Whatever that was, the meeting minutes are going to be excellent.",
+      "weight": 1.0,
+      "coffees": [
+        "other"
+      ]
+    },
+    {
+      "id": "other_early_01",
+      "text": "A mysterious vibration before sunrise. The horror film is pacing itself.",
+      "weight": 3.0,
+      "coffees": [
+        "other"
+      ],
+      "periods": [
+        "early"
+      ]
+    },
+    {
+      "id": "other_early_02",
+      "text": "The office ghosts are apparently doing the early shift.",
+      "weight": 3.0,
+      "coffees": [
+        "other"
+      ],
+      "periods": [
+        "early"
+      ]
+    },
+    {
+      "id": "other_early_03",
+      "text": "Even the unexplained phenomena have arrived before the first meeting.",
+      "weight": 3.0,
+      "coffees": [
+        "other"
+      ],
+      "periods": [
+        "early"
+      ]
+    },
+    {
+      "id": "other_early_04",
+      "text": "The machine is making decisions at an hour when nobody should.",
+      "weight": 3.0,
+      "coffees": [
+        "other"
+      ],
+      "periods": [
+        "early"
+      ]
+    },
+    {
+      "id": "other_morning_01",
+      "text": "The machine has begun the day with a question nobody can answer.",
+      "weight": 3.0,
+      "coffees": [
+        "other"
+      ],
+      "periods": [
+        "morning"
+      ]
+    },
+    {
+      "id": "other_morning_02",
+      "text": "A possible cleaning cycle, arriving with more enthusiasm than the staff.",
+      "weight": 3.0,
+      "coffees": [
+        "other"
+      ],
+      "periods": [
+        "morning"
+      ]
+    },
+    {
+      "id": "other_morning_03",
+      "text": "The classifier is awake. Its comprehension has missed the first bus.",
+      "weight": 3.0,
+      "coffees": [
+        "other"
+      ],
+      "periods": [
+        "morning"
+      ]
+    },
+    {
+      "id": "other_morning_04",
+      "text": "A little morning mystery, because the inbox was apparently too simple.",
+      "weight": 3.0,
+      "coffees": [
+        "other"
+      ],
+      "periods": [
+        "morning"
+      ]
+    },
+    {
+      "id": "other_midday_01",
+      "text": "The machine has taken an unexplained detour on the way to lunch.",
+      "weight": 3.0,
+      "coffees": [
+        "other"
+      ],
+      "periods": [
+        "midday"
+      ]
+    },
+    {
+      "id": "other_midday_02",
+      "text": "Possibly maintenance. Possibly an elaborate way to avoid the lunch queue.",
+      "weight": 3.0,
+      "coffees": [
+        "other"
+      ],
+      "periods": [
+        "midday"
+      ]
+    },
+    {
+      "id": "other_midday_03",
+      "text": "An unidentified event has joined the lunch planning committee.",
+      "weight": 3.0,
+      "coffees": [
+        "other"
+      ],
+      "periods": [
+        "midday"
+      ]
+    },
+    {
+      "id": "other_midday_04",
+      "text": "The office anomaly has excellent timing for making everyone look up.",
+      "weight": 3.0,
+      "coffees": [
+        "other"
+      ],
+      "periods": [
+        "midday"
+      ]
+    },
+    {
+      "id": "other_afternoon_01",
+      "text": "The afternoon slump has apparently affected the laws of classification.",
+      "weight": 3.0,
+      "coffees": [
+        "other"
+      ],
+      "periods": [
+        "afternoon"
+      ]
+    },
+    {
+      "id": "other_afternoon_02",
+      "text": "Possibly a rinse cycle. Possibly the machine trying to restart the afternoon.",
+      "weight": 3.0,
+      "coffees": [
+        "other"
+      ],
+      "periods": [
+        "afternoon"
+      ]
+    },
+    {
+      "id": "other_afternoon_03",
+      "text": "An unexplained event is still more interesting than the next calendar invite.",
+      "weight": 3.0,
+      "coffees": [
+        "other"
+      ],
+      "periods": [
+        "afternoon"
+      ]
+    },
+    {
+      "id": "other_afternoon_04",
+      "text": "The sensor has reached the afternoon stage of saying close enough.",
+      "weight": 3.0,
+      "coffees": [
+        "other"
+      ],
+      "periods": [
+        "afternoon"
+      ]
+    },
+    {
+      "id": "other_evening_01",
+      "text": "The machine has scheduled a mystery outside normal support hours.",
+      "weight": 3.0,
+      "coffees": [
+        "other"
+      ],
+      "periods": [
+        "evening"
+      ]
+    },
+    {
+      "id": "other_evening_02",
+      "text": "If this is a haunting, the ghost needs to submit an overtime request.",
+      "weight": 3.0,
+      "coffees": [
+        "other"
+      ],
+      "periods": [
+        "evening"
+      ]
+    },
+    {
+      "id": "other_evening_03",
+      "text": "Possibly cleaning up. Possibly opening a portal for the night shift.",
+      "weight": 3.0,
+      "coffees": [
+        "other"
+      ],
+      "periods": [
+        "evening"
+      ]
+    },
+    {
+      "id": "other_evening_04",
+      "text": "The office is winding down. The appliance is apparently developing lore.",
+      "weight": 3.0,
+      "coffees": [
+        "other"
       ],
       "periods": [
         "evening"

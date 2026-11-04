@@ -77,7 +77,8 @@ class CoffeeModel:
         if len(period_ids) != len(periods):
             raise ValueError('Period identifiers must be unique.')
         for details in coffees.values():
-            if not isinstance(details['label'], str) or not details['label'] or type(details['caffeine']) is not bool:
+            if (not isinstance(details['label'], str) or not details['label']
+                    or (details['caffeine'] is not None and type(details['caffeine']) is not bool)):
                 raise ValueError('Invalid coffee definition.')
             if not isinstance(details['aliases'], list) or any(not isinstance(a, str) for a in details['aliases']):
                 raise ValueError('Invalid coffee aliases.')
@@ -96,6 +97,8 @@ class CoffeeModel:
             fields = {field for _, field, _, _ in Formatter().parse(opener['text']) if field}
             if not fields <= {'coffee', 'coffee_lower', 'clock'}:
                 raise ValueError('Unsupported opener placeholder.')
+            if 'coffees' in opener and (not opener['coffees'] or not set(opener['coffees']) <= coffees.keys()):
+                raise ValueError('Unknown or empty opener coffee restriction.')
         identifiers, texts = set(), set()
         for item in self.data['punchlines']:
             if not isinstance(item['id'], str) or item['id'] in identifiers:
@@ -112,6 +115,8 @@ class CoffeeModel:
             if 'caffeine' in item and type(item['caffeine']) is not bool:
                 raise ValueError('Invalid caffeine restriction.')
         for coffee in coffees:
+            if not self.openers(coffee):
+                raise ValueError(f'No compatible openers for {coffee}.')
             for period in periods:
                 if not self.candidates(coffee, period['id']):
                     raise ValueError(f'No compatible punchlines for {coffee}/{period["id"]}.')
@@ -137,6 +142,10 @@ class CoffeeModel:
                 if ('coffees' not in joke or coffee in joke['coffees'])
                 and ('periods' not in joke or period in joke['periods'])
                 and ('caffeine' not in joke or joke['caffeine'] == caffeinated)]
+
+    def openers(self, coffee):
+        return [opener for opener in self.data['openers']
+                if 'coffees' not in opener or coffee in opener['coffees']]
 
     def compose(self, coffee, moment, punchline, opener):
         label = self.data['coffee_types'][coffee]['label']
@@ -191,7 +200,7 @@ class CommentGenerator:
                 punchline = self.rng.choices(eligible, weights=[j['weight'] for j in eligible], k=1)[0]
                 recent_openers = [row[0] for row in connection.execute(
                     'SELECT opener FROM history WHERE opener IS NOT NULL ORDER BY id DESC LIMIT 2')]
-                openers = avoid_recent(self.model.data['openers'], recent_openers, opener_key)
+                openers = avoid_recent(self.model.openers(coffee), recent_openers, opener_key)
                 opener = self.rng.choices(openers, weights=[o['weight'] for o in openers], k=1)[0]
                 text = self.model.compose(coffee, local, punchline, opener)
                 connection.execute('INSERT INTO history(punchline, opener) VALUES (?, ?)',
