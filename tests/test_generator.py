@@ -8,6 +8,7 @@ import tempfile
 import unittest
 
 from generator import CoffeeModel, CommentGenerator, WEIGHTS, clock_text
+from write_weights import build
 
 
 class GeneratorTests(unittest.TestCase):
@@ -23,11 +24,12 @@ class GeneratorTests(unittest.TestCase):
             return [row[0] for row in connection.execute('SELECT punchline FROM history ORDER BY id')]
 
     def test_aliases_and_unknown_drink(self):
-        for raw, expected in [(' Double-Espresso ', 'double_espresso'), ('FLAT_WHITE', 'flat_white'),
-                              ('caffè latte', 'latte'), ('decaf latte', 'decaf'), ('drip', 'filter')]:
+        for raw, expected in [(' Black-Coffee ', 'black'), ('BLACK_COFFEE', 'black'),
+                              ('coffee', 'black'), ('CAPPUCCINO', 'cappuccino'), ('expresso', 'espresso')]:
             self.assertEqual(self.model.canonical_coffee(raw), expected)
-        with self.assertRaises(ValueError):
-            self.model.canonical_coffee('tomato soup')
+        for unsupported in ['tomato soup', 'latte', 'decaf', 'double_espresso', 'americano', 'filter']:
+            with self.assertRaises(ValueError):
+                self.model.canonical_coffee(unsupported)
 
     def test_local_time_boundaries(self):
         cases = [(0, 'early'), (5, 'early'), (6, 'morning'), (9, 'morning'),
@@ -54,25 +56,18 @@ class GeneratorTests(unittest.TestCase):
         self.assertEqual(clock_text(datetime(2026, 11, 4, 12)), '12 p.m.')
         self.assertEqual(clock_text(datetime(2026, 11, 4, 16, 5)), '4:05 p.m.')
 
-    def test_decaf_excludes_caffeine_punchlines(self):
-        for period in ['early', 'morning', 'midday', 'afternoon', 'evening']:
-            jokes = self.model.candidates('decaf', period)
-            self.assertTrue(jokes)
-            self.assertFalse(any(joke.get('caffeine') is True for joke in jokes))
-            self.assertFalse(any('late_caffeine' in joke['id'] for joke in jokes))
-
     def test_time_and_drink_specific_jokes_are_restricted(self):
         morning_ids = {j['id'] for j in self.model.candidates('espresso', 'morning')}
         evening_ids = {j['id'] for j in self.model.candidates('espresso', 'evening')}
-        self.assertFalse(any(j.startswith('late_caffeine') for j in morning_ids))
-        self.assertTrue(any(j.startswith('late_caffeine') for j in evening_ids))
-        self.assertFalse(any(j.startswith('latte_') for j in evening_ids))
+        self.assertNotIn('espresso_evening_01', morning_ids)
+        self.assertIn('espresso_evening_01', evening_ids)
+        self.assertFalse(any(j.startswith('black_') or j.startswith('cappuccino_') for j in evening_ids))
 
     def test_all_contexts_have_variety_and_short_complete_comments(self):
         for coffee in self.model.data['coffee_types']:
             for period in self.model.data['periods']:
                 jokes = self.model.candidates(coffee, period['id'])
-                self.assertGreater(len(jokes), 12)
+                self.assertGreaterEqual(len(jokes), 100)
                 moment = datetime(2026, 11, 4, period['start_hour'], 59)
                 for joke in jokes:
                     for opener in self.model.data['openers']:
@@ -84,10 +79,10 @@ class GeneratorTests(unittest.TestCase):
 
     def test_recent_punchlines_do_not_repeat_and_survive_restart(self):
         moment = datetime.fromisoformat('2026-11-04T16:30:00+01:00')
-        for _ in range(12):
+        for _ in range(60):
             self.generator.comment('espresso', moment)
         previous = self.history()
-        self.assertEqual(len(set(previous)), 12)
+        self.assertEqual(len(set(previous)), 60)
         restarted = CommentGenerator(self.model, self.path, rng=random.Random(8))
         restarted.comment('espresso', moment)
         self.assertNotIn(self.history()[-1], previous)
@@ -96,7 +91,7 @@ class GeneratorTests(unittest.TestCase):
         second = CommentGenerator(self.model, self.path, rng=random.Random(9))
         moment = datetime.fromisoformat('2026-11-04T16:30:00+01:00')
         with ThreadPoolExecutor(max_workers=6) as executor:
-            outputs = list(executor.map(lambda i: (self.generator if i % 2 else second).comment('latte', moment), range(12)))
+            outputs = list(executor.map(lambda i: (self.generator if i % 2 else second).comment('cappuccino', moment), range(12)))
         self.assertEqual(len(outputs), 12)
         self.assertEqual(len(set(self.history())), 12)
 
@@ -105,6 +100,83 @@ class GeneratorTests(unittest.TestCase):
         for _ in range(105):
             self.generator.comment('espresso', moment)
         self.assertEqual(len(self.history()), 100)
+
+    def test_same_context_uses_every_available_joke_before_repeating(self):
+        moment = datetime.fromisoformat('2026-11-04T16:30:00+01:00')
+        candidates = self.model.candidates('espresso', 'afternoon')
+        for _ in candidates:
+            self.generator.comment('espresso', moment)
+        with sqlite3.connect(self.path) as connection:
+            usage = dict(connection.execute('SELECT punchline, uses FROM punchline_usage'))
+        self.assertEqual(set(usage), {j['id'] for j in candidates})
+        self.assertEqual(set(usage.values()), {1})
+        self.generator.comment('espresso', moment)
+        with sqlite3.connect(self.path) as connection:
+            self.assertEqual(connection.execute('SELECT MAX(uses) FROM punchline_usage').fetchone()[0], 2)
+
+    def test_mixed_drinks_and_times_preserve_joke_and_opener_windows(self):
+        jokes, openers = [], []
+        for index in range(180):
+            coffee = ['black', 'cappuccino', 'espresso'][index % 3]
+            hour = [7, 11, 15, 19, 4][index % 5]
+            moment = datetime(2026, 11, 4, hour, tzinfo=self.model.timezone)
+            self.generator.comment(coffee, moment)
+            with sqlite3.connect(self.path) as connection:
+                joke, opener = connection.execute('SELECT punchline, opener FROM history ORDER BY id DESC LIMIT 1').fetchone()
+            self.assertNotIn(joke, jokes[-60:])
+            self.assertNotIn(opener, openers[-2:])
+            jokes.append(joke)
+            openers.append(opener)
+
+    def test_legacy_history_is_migrated_once_without_losing_records(self):
+        legacy = Path(self.temp.name) / 'legacy.db'
+        with sqlite3.connect(legacy) as connection:
+            connection.execute('CREATE TABLE history (id INTEGER PRIMARY KEY, punchline TEXT NOT NULL)')
+            connection.executemany('INSERT INTO history(punchline) VALUES (?)', [('office_01',), ('espresso_01',)])
+        generator = CommentGenerator(self.model, legacy, rng=random.Random(3))
+        generator.comment('espresso', datetime.fromisoformat('2026-11-04T16:30:00+01:00'))
+        with sqlite3.connect(legacy) as connection:
+            history = list(connection.execute('SELECT punchline, opener FROM history ORDER BY id'))
+            usage = dict(connection.execute('SELECT punchline, uses FROM punchline_usage'))
+        self.assertEqual(history[:2], [('office_01', None), ('espresso_01', None)])
+        self.assertNotIn(history[-1][0], ['office_01', 'espresso_01'])
+        self.assertIsNotNone(history[-1][1])
+        self.assertEqual(usage['office_01'], 1)
+        self.assertEqual(usage['espresso_01'], 1)
+        self.assertEqual(sum(usage.values()), 3)
+        restarted = CommentGenerator(self.model, legacy, rng=random.Random(4))
+        with sqlite3.connect(legacy) as connection:
+            self.assertEqual(dict(connection.execute('SELECT punchline, uses FROM punchline_usage')), usage)
+        restarted.comment('espresso', datetime.fromisoformat('2026-11-04T16:30:00+01:00'))
+        with sqlite3.connect(legacy) as connection:
+            self.assertEqual(connection.execute('SELECT SUM(uses) FROM punchline_usage').fetchone()[0], 4)
+
+    def test_small_custom_model_reuses_the_oldest_available_choice(self):
+        payload = json.loads(WEIGHTS.read_text())
+        payload['punchlines'] = payload['punchlines'][:2]
+        payload['openers'] = payload['openers'][:2]
+        small = Path(self.temp.name) / 'small.json'
+        small.write_text(json.dumps(payload))
+        generator = CommentGenerator(CoffeeModel(small), self.path, rng=random.Random(2))
+        moment = datetime.fromisoformat('2026-11-04T16:30:00+01:00')
+        for _ in range(10):
+            generator.comment('black', moment)
+        with sqlite3.connect(self.path) as connection:
+            rows = list(connection.execute('SELECT punchline, opener FROM history ORDER BY id'))
+        for before, after in zip(rows, rows[1:]):
+            self.assertNotEqual(before[0], after[0])
+            self.assertNotEqual(before[1], after[1])
+
+    def test_shipped_model_matches_authored_source(self):
+        self.assertEqual(json.loads(WEIGHTS.read_text()), build())
+
+    def test_duplicate_punchline_text_is_rejected(self):
+        payload = json.loads(WEIGHTS.read_text())
+        payload['punchlines'][1]['text'] = payload['punchlines'][0]['text']
+        invalid = Path(self.temp.name) / 'duplicate.json'
+        invalid.write_text(json.dumps(payload))
+        with self.assertRaises(ValueError):
+            CoffeeModel(invalid)
 
     def test_invalid_model_is_rejected(self):
         payload = json.loads(WEIGHTS.read_text())

@@ -27,6 +27,7 @@ FROM base AS test
 USER root
 COPY requirements-dev.txt ./
 RUN pip install --no-cache-dir -r requirements-dev.txt
+COPY phrases.py write_weights.py ./
 COPY tests ./tests
 USER coffee
 CMD ["python", "-m", "unittest", "discover", "-s", "tests", "-v"]

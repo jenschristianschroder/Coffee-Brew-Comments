@@ -17,15 +17,19 @@ for attempt in range(100):
             raise
         time.sleep(0.2)
 
-payload = {'coffee_type': 'espresso', 'datetime': '2026-11-04T16:30:00+01:00'}
-request = urllib.request.Request(base + '/comment', data=json.dumps(payload).encode(),
-                                 headers={'Content-Type': 'application/json'})
-with urllib.request.urlopen(request, timeout=5) as response:
-    assert response.status == 200
-    result = json.load(response)
-    assert set(result) == {'comment'}
-    assert 'espresso' in result['comment'] and '4:30 p.m.' in result['comment']
-    print(json.dumps(result))
+with urllib.request.urlopen(base + '/coffee-types', timeout=5) as response:
+    assert json.load(response)['coffee_types'] == ['black', 'cappuccino', 'espresso']
+
+for coffee in ['black', 'cappuccino', 'espresso']:
+    payload = {'coffee_type': coffee, 'datetime': '2026-11-04T16:30:00+01:00'}
+    request = urllib.request.Request(base + '/comment', data=json.dumps(payload).encode(),
+                                     headers={'Content-Type': 'application/json'})
+    with urllib.request.urlopen(request, timeout=5) as response:
+        assert response.status == 200
+        result = json.load(response)
+        assert set(result) == {'comment'}
+        assert coffee in result['comment'].lower() and '4:30 p.m.' in result['comment']
+        print(json.dumps(result))
 
 request = urllib.request.Request(base + '/comment', data=b'{"coffee_type":"espresso","datetime":"invalid"}',
                                  headers={'Content-Type': 'application/json'})
