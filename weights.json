@@ -1,0 +1,908 @@
+{
+  "format_version": 1,
+  "name": "Coffee Snark",
+  "model_type": "conditional weighted phrase grammar",
+  "training_steps": 0,
+  "description": "Original hand-written phrases and relative sampling weights; no learned or pretrained weights.",
+  "coffee_types": {
+    "espresso": {
+      "label": "An espresso",
+      "aliases": [
+        "expresso"
+      ],
+      "caffeine": true
+    },
+    "double_espresso": {
+      "label": "A double espresso",
+      "aliases": [
+        "double espresso",
+        "doppio",
+        "double shot"
+      ],
+      "caffeine": true
+    },
+    "americano": {
+      "label": "An Americano",
+      "aliases": [],
+      "caffeine": true
+    },
+    "filter": {
+      "label": "Filter coffee",
+      "aliases": [
+        "filter coffee",
+        "drip",
+        "drip coffee",
+        "batch brew"
+      ],
+      "caffeine": true
+    },
+    "cappuccino": {
+      "label": "A cappuccino",
+      "aliases": [],
+      "caffeine": true
+    },
+    "latte": {
+      "label": "A latte",
+      "aliases": [
+        "cafe latte",
+        "caffe latte"
+      ],
+      "caffeine": true
+    },
+    "flat_white": {
+      "label": "A flat white",
+      "aliases": [
+        "flat white"
+      ],
+      "caffeine": true
+    },
+    "decaf": {
+      "label": "Decaf",
+      "aliases": [
+        "decaffeinated",
+        "decaf coffee",
+        "decaf espresso",
+        "decaf latte"
+      ],
+      "caffeine": false
+    },
+    "mocha": {
+      "label": "A mocha",
+      "aliases": [
+        "caffe mocha",
+        "cafe mocha"
+      ],
+      "caffeine": true
+    },
+    "cortado": {
+      "label": "A cortado",
+      "aliases": [],
+      "caffeine": true
+    },
+    "macchiato": {
+      "label": "A macchiato",
+      "aliases": [
+        "espresso macchiato"
+      ],
+      "caffeine": true
+    },
+    "ristretto": {
+      "label": "A ristretto",
+      "aliases": [],
+      "caffeine": true
+    },
+    "lungo": {
+      "label": "A lungo",
+      "aliases": [],
+      "caffeine": true
+    },
+    "coffee": {
+      "label": "Coffee",
+      "aliases": [
+        "black coffee",
+        "regular coffee"
+      ],
+      "caffeine": true
+    }
+  },
+  "periods": [
+    {
+      "id": "early",
+      "start_hour": 0,
+      "end_hour": 6
+    },
+    {
+      "id": "morning",
+      "start_hour": 6,
+      "end_hour": 10
+    },
+    {
+      "id": "midday",
+      "start_hour": 10,
+      "end_hour": 14
+    },
+    {
+      "id": "afternoon",
+      "start_hour": 14,
+      "end_hour": 17
+    },
+    {
+      "id": "evening",
+      "start_hour": 17,
+      "end_hour": 24
+    }
+  ],
+  "openers": [
+    {
+      "text": "{coffee} at {clock}.",
+      "weight": 5.0
+    },
+    {
+      "text": "{coffee} at {clock}?",
+      "weight": 2.0
+    },
+    {
+      "text": "Ah, {coffee_lower} at {clock}.",
+      "weight": 1.0
+    }
+  ],
+  "punchlines": [
+    {
+      "id": "office_01",
+      "text": "Liquid optimism. Results may vary.",
+      "weight": 1.0
+    },
+    {
+      "id": "office_02",
+      "text": "Another cup for the task we are still not starting.",
+      "weight": 1.0
+    },
+    {
+      "id": "office_03",
+      "text": "The machine has done its part. Awkwardly, the rest is up to us.",
+      "weight": 1.0
+    },
+    {
+      "id": "office_04",
+      "text": "A very convincing impression of progress.",
+      "weight": 1.0
+    },
+    {
+      "id": "office_05",
+      "text": "At least one thing in this office has finished brewing.",
+      "weight": 1.0
+    },
+    {
+      "id": "office_06",
+      "text": "This meeting could have been a coffee. And now it is.",
+      "weight": 1.0
+    },
+    {
+      "id": "office_07",
+      "text": "A small ceremony for a very large to-do list.",
+      "weight": 1.0
+    },
+    {
+      "id": "office_08",
+      "text": "The spreadsheet is going to be so impressed.",
+      "weight": 1.0
+    },
+    {
+      "id": "office_09",
+      "text": "Productivity has been notified. No response yet.",
+      "weight": 1.0
+    },
+    {
+      "id": "office_10",
+      "text": "One more beverage between us and the actual task.",
+      "weight": 1.0
+    },
+    {
+      "id": "office_11",
+      "text": "Finally, an office process that produces something useful.",
+      "weight": 1.0
+    },
+    {
+      "id": "office_12",
+      "text": "Another successful meeting with the coffee machine.",
+      "weight": 1.0
+    },
+    {
+      "id": "office_13",
+      "text": "The most reliable member of the team strikes again.",
+      "weight": 1.0
+    },
+    {
+      "id": "office_14",
+      "text": "A bold investment in the appearance of being busy.",
+      "weight": 1.0
+    },
+    {
+      "id": "office_15",
+      "text": "Please allow three to five business sips for motivation.",
+      "weight": 1.0
+    },
+    {
+      "id": "office_16",
+      "text": "The coffee is ready. The plan remains under review.",
+      "weight": 1.0
+    },
+    {
+      "id": "early_01",
+      "text": "Even the coffee machine thinks this is a bit much.",
+      "weight": 3.0,
+      "periods": [
+        "early"
+      ]
+    },
+    {
+      "id": "early_02",
+      "text": "The sun has not clocked in. Expectations seem high.",
+      "weight": 3.0,
+      "periods": [
+        "early"
+      ]
+    },
+    {
+      "id": "early_03",
+      "text": "An impressive commitment to being awake against our better judgment.",
+      "weight": 3.0,
+      "periods": [
+        "early"
+      ]
+    },
+    {
+      "id": "early_04",
+      "text": "Apparently the day needed a prequel.",
+      "weight": 3.0,
+      "periods": [
+        "early"
+      ]
+    },
+    {
+      "id": "early_05",
+      "text": "The office plants are still asleep. Sensible of them.",
+      "weight": 3.0,
+      "periods": [
+        "early"
+      ]
+    },
+    {
+      "id": "morning_01",
+      "text": "The official start of pretending to be a morning person.",
+      "weight": 3.0,
+      "periods": [
+        "morning"
+      ]
+    },
+    {
+      "id": "morning_02",
+      "text": "Breakfast for the part of the day that has deadlines.",
+      "weight": 3.0,
+      "periods": [
+        "morning"
+      ]
+    },
+    {
+      "id": "morning_03",
+      "text": "A warm-up for opening the inbox and immediately regretting it.",
+      "weight": 3.0,
+      "periods": [
+        "morning"
+      ]
+    },
+    {
+      "id": "morning_04",
+      "text": "The first item on the to-do list that stood a chance.",
+      "weight": 3.0,
+      "periods": [
+        "morning"
+      ]
+    },
+    {
+      "id": "morning_05",
+      "text": "Optimism, before the calendar has its say.",
+      "weight": 3.0,
+      "periods": [
+        "morning"
+      ]
+    },
+    {
+      "id": "morning_06",
+      "text": "The day has barely started and already requires a beverage strategy.",
+      "weight": 3.0,
+      "periods": [
+        "morning"
+      ]
+    },
+    {
+      "id": "midday_01",
+      "text": "A perfectly respectable way to postpone lunch decisions.",
+      "weight": 3.0,
+      "periods": [
+        "midday"
+      ]
+    },
+    {
+      "id": "midday_02",
+      "text": "The morning has submitted its resignation.",
+      "weight": 3.0,
+      "periods": [
+        "midday"
+      ]
+    },
+    {
+      "id": "midday_03",
+      "text": "Halfway to lunch. Already negotiating terms.",
+      "weight": 3.0,
+      "periods": [
+        "midday"
+      ]
+    },
+    {
+      "id": "midday_04",
+      "text": "The second half of the morning requires additional paperwork.",
+      "weight": 3.0,
+      "periods": [
+        "midday"
+      ]
+    },
+    {
+      "id": "midday_05",
+      "text": "A brief intermission in the ongoing production of looking busy.",
+      "weight": 3.0,
+      "periods": [
+        "midday"
+      ]
+    },
+    {
+      "id": "afternoon_01",
+      "text": "The afternoon slump has requested a meeting.",
+      "weight": 3.0,
+      "periods": [
+        "afternoon"
+      ]
+    },
+    {
+      "id": "afternoon_02",
+      "text": "Lunch has left the chat. Motivation never joined.",
+      "weight": 3.0,
+      "periods": [
+        "afternoon"
+      ]
+    },
+    {
+      "id": "afternoon_03",
+      "text": "A small appeal against the verdict of the afternoon.",
+      "weight": 3.0,
+      "periods": [
+        "afternoon"
+      ]
+    },
+    {
+      "id": "afternoon_04",
+      "text": "The day is now running on extensions and good intentions.",
+      "weight": 3.0,
+      "periods": [
+        "afternoon"
+      ]
+    },
+    {
+      "id": "afternoon_05",
+      "text": "Another attempt to turn the last meeting into a productive one.",
+      "weight": 3.0,
+      "periods": [
+        "afternoon"
+      ]
+    },
+    {
+      "id": "evening_01",
+      "text": "The office is closing. The plot is apparently thickening.",
+      "weight": 3.0,
+      "periods": [
+        "evening"
+      ]
+    },
+    {
+      "id": "evening_02",
+      "text": "A bold interpretation of winding down.",
+      "weight": 3.0,
+      "periods": [
+        "evening"
+      ]
+    },
+    {
+      "id": "evening_03",
+      "text": "The calendar says after hours. The mug has other plans.",
+      "weight": 3.0,
+      "periods": [
+        "evening"
+      ]
+    },
+    {
+      "id": "evening_04",
+      "text": "Apparently going home needed a side quest.",
+      "weight": 3.0,
+      "periods": [
+        "evening"
+      ]
+    },
+    {
+      "id": "evening_05",
+      "text": "The day has asked for a sequel. Nobody approved the budget.",
+      "weight": 3.0,
+      "periods": [
+        "evening"
+      ]
+    },
+    {
+      "id": "late_caffeine_01",
+      "text": "Bold strategy for someone who enjoys sleeping.",
+      "weight": 3.0,
+      "periods": [
+        "afternoon",
+        "evening"
+      ],
+      "caffeine": true
+    },
+    {
+      "id": "late_caffeine_02",
+      "text": "Bedtime has been moved to the backlog.",
+      "weight": 3.0,
+      "periods": [
+        "afternoon",
+        "evening"
+      ],
+      "caffeine": true
+    },
+    {
+      "id": "late_caffeine_03",
+      "text": "Tomorrow would like a word about this decision.",
+      "weight": 3.0,
+      "periods": [
+        "afternoon",
+        "evening"
+      ],
+      "caffeine": true
+    },
+    {
+      "id": "late_caffeine_04",
+      "text": "An excellent way to give tonight a surprise agenda.",
+      "weight": 3.0,
+      "periods": [
+        "afternoon",
+        "evening"
+      ],
+      "caffeine": true
+    },
+    {
+      "id": "espresso_01",
+      "text": "A whole productivity strategy in a very small cup.",
+      "weight": 4.0,
+      "coffees": [
+        "espresso",
+        "ristretto"
+      ]
+    },
+    {
+      "id": "espresso_02",
+      "text": "Small cup. Ambitious expectations.",
+      "weight": 4.0,
+      "coffees": [
+        "espresso",
+        "ristretto"
+      ]
+    },
+    {
+      "id": "espresso_03",
+      "text": "Finally, a meeting that can be finished in one sip.",
+      "weight": 4.0,
+      "coffees": [
+        "espresso",
+        "ristretto"
+      ]
+    },
+    {
+      "id": "espresso_04",
+      "text": "All the drama, none of the volume.",
+      "weight": 4.0,
+      "coffees": [
+        "espresso",
+        "ristretto"
+      ]
+    },
+    {
+      "id": "double_01",
+      "text": "Two shots. Still only one inbox.",
+      "weight": 4.0,
+      "coffees": [
+        "double_espresso"
+      ]
+    },
+    {
+      "id": "double_02",
+      "text": "Because one shot left room for doubt.",
+      "weight": 4.0,
+      "coffees": [
+        "double_espresso"
+      ]
+    },
+    {
+      "id": "double_03",
+      "text": "The calendar has clearly made an enemy.",
+      "weight": 4.0,
+      "coffees": [
+        "double_espresso"
+      ]
+    },
+    {
+      "id": "double_04",
+      "text": "A double espresso for a single remaining thread of patience.",
+      "weight": 4.0,
+      "coffees": [
+        "double_espresso"
+      ]
+    },
+    {
+      "id": "americano_01",
+      "text": "Espresso with enough water to attend the entire meeting.",
+      "weight": 4.0,
+      "coffees": [
+        "americano"
+      ]
+    },
+    {
+      "id": "americano_02",
+      "text": "A tiny coffee given a very generous operating budget.",
+      "weight": 4.0,
+      "coffees": [
+        "americano"
+      ]
+    },
+    {
+      "id": "americano_03",
+      "text": "All the ambition of espresso, with more time to reconsider.",
+      "weight": 4.0,
+      "coffees": [
+        "americano"
+      ]
+    },
+    {
+      "id": "filter_01",
+      "text": "No foam. No ceremony. Just an unreasonable amount of faith.",
+      "weight": 4.0,
+      "coffees": [
+        "filter",
+        "coffee"
+      ]
+    },
+    {
+      "id": "filter_02",
+      "text": "A classic choice for a problem that is definitely not new.",
+      "weight": 4.0,
+      "coffees": [
+        "filter",
+        "coffee"
+      ]
+    },
+    {
+      "id": "filter_03",
+      "text": "The spreadsheet of coffees. Dependable, and everywhere.",
+      "weight": 4.0,
+      "coffees": [
+        "filter",
+        "coffee"
+      ]
+    },
+    {
+      "id": "latte_01",
+      "text": "The milk has brought a little coffee to work.",
+      "weight": 4.0,
+      "coffees": [
+        "latte"
+      ]
+    },
+    {
+      "id": "latte_02",
+      "text": "Coffee wearing a very comfortable disguise.",
+      "weight": 4.0,
+      "coffees": [
+        "latte"
+      ]
+    },
+    {
+      "id": "latte_03",
+      "text": "Caffeine has arrived in business casual.",
+      "weight": 4.0,
+      "coffees": [
+        "latte"
+      ]
+    },
+    {
+      "id": "latte_04",
+      "text": "A warm glass of plausible productivity.",
+      "weight": 4.0,
+      "coffees": [
+        "latte"
+      ]
+    },
+    {
+      "id": "cappuccino_01",
+      "text": "Foam on top. Unfinished work underneath.",
+      "weight": 4.0,
+      "coffees": [
+        "cappuccino"
+      ]
+    },
+    {
+      "id": "cappuccino_02",
+      "text": "A little hat for the coffee. Very professional.",
+      "weight": 4.0,
+      "coffees": [
+        "cappuccino"
+      ]
+    },
+    {
+      "id": "cappuccino_03",
+      "text": "Productivity, but make it frothy.",
+      "weight": 4.0,
+      "coffees": [
+        "cappuccino"
+      ]
+    },
+    {
+      "id": "cappuccino_04",
+      "text": "An impressive amount of presentation for such a small deliverable.",
+      "weight": 4.0,
+      "coffees": [
+        "cappuccino"
+      ]
+    },
+    {
+      "id": "flatwhite_01",
+      "text": "Minimalist foam. Maximalist expectations.",
+      "weight": 4.0,
+      "coffees": [
+        "flat_white"
+      ]
+    },
+    {
+      "id": "flatwhite_02",
+      "text": "A latte that has read the style guide.",
+      "weight": 4.0,
+      "coffees": [
+        "flat_white"
+      ]
+    },
+    {
+      "id": "flatwhite_03",
+      "text": "Quietly judging the cappuccino. As usual.",
+      "weight": 4.0,
+      "coffees": [
+        "flat_white"
+      ]
+    },
+    {
+      "id": "mocha_01",
+      "text": "Dessert has successfully impersonated an office supply.",
+      "weight": 4.0,
+      "coffees": [
+        "mocha"
+      ]
+    },
+    {
+      "id": "mocha_02",
+      "text": "Chocolate with a very convincing job title.",
+      "weight": 4.0,
+      "coffees": [
+        "mocha"
+      ]
+    },
+    {
+      "id": "mocha_03",
+      "text": "The expense report will simply say coffee.",
+      "weight": 4.0,
+      "coffees": [
+        "mocha"
+      ]
+    },
+    {
+      "id": "cortado_01",
+      "text": "A carefully negotiated truce between espresso and milk.",
+      "weight": 4.0,
+      "coffees": [
+        "cortado"
+      ]
+    },
+    {
+      "id": "cortado_02",
+      "text": "Small, balanced, and more organized than the calendar.",
+      "weight": 4.0,
+      "coffees": [
+        "cortado"
+      ]
+    },
+    {
+      "id": "cortado_03",
+      "text": "A coffee with excellent boundaries. Aspirational.",
+      "weight": 4.0,
+      "coffees": [
+        "cortado"
+      ]
+    },
+    {
+      "id": "macchiato_01",
+      "text": "Espresso with just enough milk to call it collaboration.",
+      "weight": 4.0,
+      "coffees": [
+        "macchiato"
+      ]
+    },
+    {
+      "id": "macchiato_02",
+      "text": "A coffee that delegated one tiny task to the milk.",
+      "weight": 4.0,
+      "coffees": [
+        "macchiato"
+      ]
+    },
+    {
+      "id": "macchiato_03",
+      "text": "The foam contribution has been noted in the minutes.",
+      "weight": 4.0,
+      "coffees": [
+        "macchiato"
+      ]
+    },
+    {
+      "id": "lungo_01",
+      "text": "An espresso that stayed for the follow-up meeting.",
+      "weight": 4.0,
+      "coffees": [
+        "lungo"
+      ]
+    },
+    {
+      "id": "lungo_02",
+      "text": "The coffee equivalent of one more quick question.",
+      "weight": 4.0,
+      "coffees": [
+        "lungo"
+      ]
+    },
+    {
+      "id": "lungo_03",
+      "text": "Apparently even the espresso needed an extension.",
+      "weight": 4.0,
+      "coffees": [
+        "lungo"
+      ]
+    },
+    {
+      "id": "decaf_01",
+      "text": "All the ritual, with the drama turned down.",
+      "weight": 4.0,
+      "coffees": [
+        "decaf"
+      ]
+    },
+    {
+      "id": "decaf_02",
+      "text": "Coffee has joined the meeting on mute.",
+      "weight": 4.0,
+      "coffees": [
+        "decaf"
+      ]
+    },
+    {
+      "id": "decaf_03",
+      "text": "A very diplomatic relationship with the coffee machine.",
+      "weight": 4.0,
+      "coffees": [
+        "decaf"
+      ]
+    },
+    {
+      "id": "decaf_04",
+      "text": "An excellent cup of plausible deniability.",
+      "weight": 4.0,
+      "coffees": [
+        "decaf"
+      ]
+    },
+    {
+      "id": "decaf_05",
+      "text": "The office ritual, now in low-power mode.",
+      "weight": 4.0,
+      "coffees": [
+        "decaf"
+      ]
+    },
+    {
+      "id": "decaf_late_01",
+      "text": "A rare beverage decision that remembers tomorrow exists.",
+      "weight": 6.0,
+      "coffees": [
+        "decaf"
+      ],
+      "periods": [
+        "afternoon",
+        "evening"
+      ]
+    },
+    {
+      "id": "decaf_late_02",
+      "text": "Someone has actually read the bedtime agenda.",
+      "weight": 6.0,
+      "coffees": [
+        "decaf"
+      ],
+      "periods": [
+        "afternoon",
+        "evening"
+      ]
+    },
+    {
+      "id": "decaf_late_03",
+      "text": "At last, a plot twist that respects office hours.",
+      "weight": 6.0,
+      "coffees": [
+        "decaf"
+      ],
+      "periods": [
+        "afternoon",
+        "evening"
+      ]
+    },
+    {
+      "id": "double_late_01",
+      "text": "Two shots, and apparently no plans to count sheep.",
+      "weight": 6.0,
+      "coffees": [
+        "double_espresso"
+      ],
+      "periods": [
+        "afternoon",
+        "evening"
+      ]
+    },
+    {
+      "id": "double_late_02",
+      "text": "Bedtime has just been escalated to management.",
+      "weight": 6.0,
+      "coffees": [
+        "double_espresso"
+      ],
+      "periods": [
+        "afternoon",
+        "evening"
+      ]
+    },
+    {
+      "id": "milk_morning_01",
+      "text": "Breakfast has outsourced its personality to the milk frother.",
+      "weight": 5.0,
+      "coffees": [
+        "latte",
+        "cappuccino",
+        "flat_white"
+      ],
+      "periods": [
+        "morning"
+      ]
+    },
+    {
+      "id": "milk_morning_02",
+      "text": "An ambitious attempt to make the morning feel like a cafe.",
+      "weight": 5.0,
+      "coffees": [
+        "latte",
+        "cappuccino",
+        "flat_white"
+      ],
+      "periods": [
+        "morning"
+      ]
+    }
+  ]
+}
