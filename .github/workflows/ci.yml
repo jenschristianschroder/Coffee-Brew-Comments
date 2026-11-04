@@ -25,7 +25,7 @@ jobs:
       - name: Validate Compose configuration
         run: docker compose config --quiet
       - name: Start production container
-        run: docker compose up -d --build
+        run: docker compose up -d --build --wait --wait-timeout 60
       - name: Exercise real HTTP endpoint
         run: python3 tests/smoke_http.py
       - name: Container diagnostics

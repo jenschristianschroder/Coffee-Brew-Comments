@@ -12,7 +12,7 @@ for attempt in range(100):
         with urllib.request.urlopen(base + '/health', timeout=1) as response:
             assert json.load(response) == {'status': 'ok'}
         break
-    except (urllib.error.URLError, TimeoutError):
+    except (urllib.error.URLError, TimeoutError, ConnectionError):
         if attempt == 99:
             raise
         time.sleep(0.2)
