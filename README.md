@@ -4,8 +4,12 @@ A small Docker service that turns a coffee type and date-time into a short,
 sarcastic comment for your office coffee machine. Send the returned text to the
 Raspberry Pi's existing text-to-speech setup.
 
-The generator uses **95 original punchlines, three setups, and directly assigned
-sampling weights**. Coffee type and time of day determine which lines fit.
+The generator supports **black coffee, cappuccino, and espresso**, with **300
+original punchlines, ten setups, and directly assigned sampling weights**.
+Coffee type and time of day determine which lines fit. Each coffee/time-of-day
+combination has 118 applicable punchlines and 1,180 wording combinations, before
+counting different clock times. Different setups are wording variations; the
+300 punchlines are the actual joke bank.
 It needs no training, GPU, model download, or external API. This is a conditional
 phrase generator: it combines authored text rather than inventing arbitrary text
 with a neural language model.
@@ -40,10 +44,14 @@ One possible response:
 }
 ```
 
-Each request samples a compatible comment. It avoids the last 12 punchlines,
-including across container restarts. That history is shared by requests to this
-instance. Repeating a request generates another comment; this endpoint does not
-deduplicate brew events or play audio itself.
+Each request samples a compatible comment. It excludes the last **60 punchlines**,
+prefers less-used jokes, and avoids the last **two opening styles**, including
+across container restarts. That history is shared by requests to this instance.
+Starting with fresh history, repeatedly requesting the same coffee/time period
+uses all 118 applicable jokes before any punchline repeats. When contexts vary,
+usage counts are shared so frequently heard generic jokes give way to other material.
+Repeating a request generates another comment; this endpoint does not deduplicate
+brew events or play audio itself.
 
 | Endpoint | Behavior |
 | --- | --- |
@@ -59,11 +67,10 @@ ambiguities explicit. Missing offsets, invalid dates, unknown drinks, and extra
 request fields return HTTP 422. `coffee_type` is case-insensitive; spaces,
 underscores, and hyphens are normalized.
 
-Supported types: `espresso`, `double_espresso`, `americano`, `filter`,
-`cappuccino`, `latte`, `flat_white`, `decaf`, `mocha`, `cortado`, `macchiato`,
-`ristretto`, `lungo`, and `coffee`. Aliases include `doppio`, `drip`, `caffè latte`,
-and `decaf latte`. Decaf variants are grouped as `decaf`, and caffeine-specific
-late-day jokes are excluded for them.
+Supported types are exactly `black`, `cappuccino`, and `espresso`. Black coffee
+also accepts `black coffee`, `coffee`, and `regular coffee`. The existing
+`expresso` alias is accepted for espresso. Other beverages, including latte,
+decaf, filter, and double espresso, return HTTP 422.
 
 ## Call it from your brew handler
 
@@ -99,14 +106,22 @@ The service has no authentication and is intended for a local deployment.
 ## Tune the humor and timing
 
 `weights.json` is the complete phrase model. Each punchline has an identifier,
-text, a positive relative `weight`, and optional `coffees`, `periods`, or
-`caffeine` restrictions. Higher weights make a compatible line more likely.
-The model first filters by context, excludes recently used punchlines where
-possible, and then samples according to these weights.
+text, a positive relative `weight`, and optional context restrictions. The model
+filters by coffee and time, excludes the last 60 punchlines, and finds the
+least-used remaining jokes. It then samples among those according to their
+weights. A high weight gives a joke earlier priority without letting it crowd
+out the rest of the bank. Ten opening styles are sampled independently, excluding
+the two most recently heard styles.
 
-Change the JSON and rebuild the container to update it. `write_weights.py` is
-the readable source of the supplied model; running it regenerates and overwrites
-`weights.json`. Edit that script if you want to maintain the generated model.
+If a custom model has too few choices for a repeat window, the generator reuses
+the least recent applicable choice. The supplied 118-joke pools are large enough
+to maintain the full 60-punchline exclusion window.
+
+Change the JSON and rebuild the container to update it. The authored joke bank is
+in `phrases.py`; `write_weights.py` assigns contexts, setups, and weights. After
+editing those source files, run `python write_weights.py` to regenerate
+`weights.json`, then rebuild the container. Keep existing joke IDs stable when
+editing a running installation; append new lines to a group to preserve its IDs.
 
 | Period | Local hours |
 | --- | --- |
@@ -118,8 +133,11 @@ the readable source of the supplied model; running it regenerates and overwrites
 
 Set `COFFEE_TIMEZONE` in `compose.yaml` to another IANA timezone if required.
 The jokes are in English. They target the beverage, the clock, and office life.
-They do not use anyone's name or personal information. History stores only
-punchline identifiers, and is capped at 100 entries.
+They do not use anyone's name or personal information. History stores the last
+100 pairs of punchline/opener identifiers, plus a usage counter for each
+punchline that has been heard. Existing history databases are upgraded in place;
+usage counters start from their retained history. Keep the existing volume when
+updating with `docker compose up -d --build`.
 
 ## Test and develop
 
@@ -141,8 +159,9 @@ docker run --rm coffee-snark-test
 
 GitHub Actions builds and tests the container on both x86-64 and ARM64 runners,
 then checks the production HTTP endpoint. The tests cover time zones and DST,
-coffee aliases, decaf restrictions, comment length, repetition history,
-concurrent requests, input validation, and the HTTP contract.
+coffee aliases and unsupported drinks, comment length, repetition history,
+fair use of the joke bank, database upgrades, concurrent requests, input
+validation, and the HTTP contract.
 
 Useful maintenance commands:
 

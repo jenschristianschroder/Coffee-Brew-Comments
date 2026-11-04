@@ -34,7 +34,7 @@ def create_app(*, history_db=None, timezone=None, weights_path=None):
     history = history_db or os.environ.get('HISTORY_DB', str(Path(__file__).resolve().parent / 'data' / 'history.sqlite3'))
     generator = CommentGenerator(model, history)
     application = FastAPI(
-        title='Coffee Snark', version='1.0.0',
+        title='Coffee Snark', version='1.1.0',
         description='Generate a short, office-friendly coffee comment from the drink and local time.')
     application.state.generator = generator
 
