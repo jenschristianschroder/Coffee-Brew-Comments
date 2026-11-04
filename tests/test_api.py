@@ -5,6 +5,7 @@ import unittest
 from fastapi.testclient import TestClient
 
 from app import create_app
+from phrases import OTHER, OTHER_PERIOD_JOKES
 
 
 class APITests(unittest.TestCase):
@@ -28,6 +29,17 @@ class APITests(unittest.TestCase):
         self.assertIn('black coffee', result.json()['comment'].lower())
         self.assertIn('4:30 p.m.', result.json()['comment'])
 
+    def test_other_and_unknown_aliases_use_machine_activity_comments(self):
+        allowed = OTHER + OTHER_PERIOD_JOKES['afternoon']
+        for coffee in ['other', ' OTHER ', 'UNKNOWN', 'unrecognized', 'unrecognised']:
+            result = self.client.post('/comment', json={**self.payload, 'coffee_type': coffee})
+            self.assertEqual(result.status_code, 200)
+            self.assertEqual(set(result.json()), {'comment'})
+            text = result.json()['comment']
+            self.assertIn('4:30 p.m.', text)
+            self.assertTrue(any(text.endswith(line) for line in allowed), text)
+            self.assertFalse(text.startswith(('Black coffee', 'A cappuccino', 'An espresso')))
+
     def test_invalid_inputs_are_422(self):
         for update in [{'coffee_type': 'tea'}, {'coffee_type': ''}, {'coffee_type': ' '},
                        {'coffee_type': 'latte'}, {'coffee_type': 'double_espresso'}, {'coffee_type': 'decaf'},
@@ -45,7 +57,7 @@ class APITests(unittest.TestCase):
     def test_health_types_and_openapi(self):
         self.assertEqual(self.client.get('/health').json(), {'status': 'ok'})
         types = self.client.get('/coffee-types').json()
-        self.assertEqual(types['coffee_types'], ['black', 'cappuccino', 'espresso'])
+        self.assertEqual(types['coffee_types'], ['black', 'cappuccino', 'espresso', 'other'])
         self.assertEqual(types['timezone'], 'Europe/Copenhagen')
         schema = self.client.get('/openapi.json').json()
         self.assertIn('/comment', schema['paths'])
