@@ -5,19 +5,34 @@ sarcastic comment for your office coffee machine. Send the returned text to the
 Raspberry Pi's existing text-to-speech setup.
 
 The generator supports **black coffee, cappuccino, espresso, and `other`** for
-unidentified machine activity. It has **420 original punchlines**: 300 for coffee
-and 120 for mystery events, with separate sets of ten opening styles.
+unidentified machine activity. Version 2 defaults to the **large** model, combining
+complete jokes with authored sentence structures and typed phrase fragments.
+It needs no training, GPU, model download, or external API. It is a rule-based
+sentence composer, not a neural language model.
 
-| Input category | Applicable jokes per time period | Opening styles | Wording combinations |
-| --- | ---: | ---: | ---: |
-| Black, cappuccino, or espresso | 118 | 10 | 1,180 |
-| Other machine activity | 104 | 10 | 1,040 |
+| Model data | Classic | Large (default) |
+| --- | ---: | ---: |
+| File size | 93,489 bytes (93.5 KB) | 569,347 bytes (569.3 KB) |
+| Complete punchlines | 420 | 1,000 |
+| Opening styles | 20 | 60 |
+| Sentence families | 0 | 100 |
+| Sentence patterns | 0 | 400 |
+| Typed fragments | 0 | 2,000 |
+| Sampling weights | 440 | 3,460 |
+| Learned parameters | 0 | 0 |
 
-These counts exclude different clock times. Different setups are wording
-variations; the punchlines are the actual joke bank. Weights are assigned directly.
-It needs no training, GPU, model download, or external API. This is a conditional
-phrase generator: it combines authored text rather than inventing arbitrary text
-with a neural language model.
+The large bank contains **750 coffee jokes and 250 mystery-event jokes**, including
+all original material. Its weekday-specific jokes use the local date in the
+configured timezone. Each of 100 sentence families has four introductions; each
+of 20 vocabulary banks combines five compatible modifiers with 20 base phrases.
+Those 2,000 lexical variations are not 2,000 separate jokes.
+
+For a fixed coffee, weekday, and time period, the large model offers roughly
+28.8–62.4 million selectable combinations. This is a structural count, not that
+many distinct jokes or a claim of general language ability. The classic model has
+1,180 combinations per recognized coffee/time period and 1,040 for `other`.
+Counts exclude varying the clock time. All shipped large combinations are bounded
+to 220 characters. The model file sizes exclude the service, Docker image, and history.
 
 ## Start on the Pi
 
@@ -49,14 +64,15 @@ One possible response:
 }
 ```
 
-Each request samples a compatible comment. It excludes the last **60 punchlines**,
-prefers less-used jokes, and avoids the last **two opening styles**, including
-across container restarts. That history is shared by requests to this instance.
-Starting with fresh history, repeatedly requesting the same type/time period
-uses every applicable joke before any punchline repeats: 118 for a recognized
-coffee, or 104 for `other`. When contexts vary,
-usage counts are shared so frequently heard generic jokes give way to other material.
-Repeating a request generates another comment; this endpoint does not deduplicate
+Each request samples a compatible comment. It excludes the last **60 joke premises**,
+prefers less-used jokes, and avoids the last **two opening styles**, including across
+restarts. All four introductions of a sentence family share one history key, so
+changing the introduction cannot bypass the repeat window. Fragments are also
+selected from the least-used eligible choices, using persistent usage counters.
+
+With a fixed context, every eligible complete joke or sentence family is used before
+any premise is reused. Counts are shared across coffee types and time periods.
+Repeating a request generates another comment; the service does not deduplicate
 brew events or play audio itself.
 
 | Endpoint | Behavior |
@@ -64,6 +80,7 @@ brew events or play audio itself.
 | `POST /comment` | Accepts `coffee_type` and `datetime`; returns `{"comment": "..."}`. |
 | `POST /generate` | rpiCoffee contract: accepts `coffee_label` and `timestamp`; returns `response` and `elapsed_s`. |
 | `GET /manifest` | Describes the `coffee-comments` service for rpiCoffee's service registry. |
+| `GET /model` | Reports the active variant, exact file size, component counts, and combination range without generating text. |
 | `GET /coffee-types` | Returns supported coffee type identifiers and configured timezone. |
 | `GET /health` | Returns `{"status":"ok"}` when the process is responding. |
 | `GET /docs` | Interactive API documentation. |
@@ -155,9 +172,10 @@ The generation step's input mapping is:
 Wire the TTS and remote-save `text` inputs to `$coffee-comments.response`.
 The manifest supports the `skip` and `halt` failure policies; a 3-second
 per-step timeout is a reasonable starting point for this local service.
-The provider selector and the kiosk's legacy text-event/final-summary handling
-still need integration in rpiCoffee, where those paths currently name `llm`
-and `llm-ollama` explicitly. Registering this service does not perform that wiring.
+rpiCoffee also bundles this service's source. If using that bundled version, follow
+[its setup instructions](https://github.com/jenschristianschroder/rpiCoffee/tree/main/services/coffee-comments)
+and avoid starting a second container on the same port. Registration and pipeline
+selection remain manual; the service does not change your saved pipeline.
 
 `/generate` and `/comment` use the same generator, timezone, aliases, and persistent
 repetition history. `unknown`, `unrecognized`, and `unrecognised` produce `other`
@@ -169,7 +187,7 @@ This is the structured coffee-generation contract, not a raw-prompt LLM API.
 Send only `coffee_label` and `timestamp`: `prompt`, `system`, `max_tokens`, and
 other extra fields are rejected. `elapsed_s` measures generation including the
 history update. Neural token counts and token rates are not reported. Settings
-remain configured through the environment and `weights.json`; the manifest does
+remain configured through the environment and the selected model file; the manifest does
 not advertise runtime settings endpoints.
 
 ## Call it from your brew handler
@@ -203,27 +221,55 @@ network can call `http://coffee-snark:8080`. To accept requests from another
 machine on your LAN, change the port mapping to `"8080:8080"` and use the Pi's IP.
 The service has no authentication and is intended for a local deployment.
 
+## Select a model and inspect its size
+
+Set `COFFEE_MODEL_VARIANT=large` or `COFFEE_MODEL_VARIANT=classic` in your `.env`
+and recreate the container with `docker compose up -d --force-recreate`.
+The default is `large`. Both model files are bundled in the image.
+The classic `weights.json` is byte-for-byte unchanged. Existing generation request
+and response fields, aliases, service name, and endpoints remain compatible.
+
+```bash
+curl -sS http://127.0.0.1:8080/model
+```
+
+`GET /model` reports the selected file's exact bytes, 0 learned parameters,
+sampling-weight count, complete jokes, patterns, families, fragments, and the range
+of selectable combinations for fixed contexts. Neither this endpoint nor health
+checks consume repetition history.
+
+A supplied `WEIGHTS_PATH` overrides the variant selector, retaining custom-model
+support. Format 1 files still work. Format 2 adds `patterns`, `slots`, and optional
+weekday restrictions on complete jokes. An invalid variant fails at startup.
+
 ## Tune the humor and timing
 
-`weights.json` is the complete phrase model. Each punchline has an identifier,
-text, a positive relative `weight`, and optional context restrictions. The model
-filters by coffee and time, excludes the last 60 punchlines, and finds the
-least-used remaining jokes. It then samples among those according to their
-weights. A high weight gives a joke earlier priority without letting it crowd
-out the rest of the bank. Opening styles are filtered by category before sampling,
-excluding the two most recently heard styles. A model entry's optional `coffees`
-restriction applies to both punchlines and openers. For `other`, the supplied
-model excludes all confirmed-coffee material in both stages.
+The complete classic phrase model is `weights.json`. The large model is
+`weights-large.json`. Every selectable opener, joke, pattern, or fragment has a
+positive relative sampling weight. The generator filters by context, avoids recent
+joke premises, and prefers the least-used remaining premises before applying weights.
+Weights influence selection order; they are not learned neural parameters.
 
-If a custom model has too few choices for a repeat window, the generator reuses
-the least recent applicable choice. The supplied 104- and 118-joke pools are large enough
-to maintain the full 60-punchline exclusion window.
+The source files are:
 
-Change the JSON and rebuild the container to update it. The authored joke bank is
-in `phrases.py`; `write_weights.py` assigns contexts, setups, and weights. After
-editing those source files, run `python write_weights.py` to regenerate
-`weights.json`, then rebuild the container. Keep existing joke IDs stable when
-editing a running installation; append new lines to a group to preserve its IDs.
+- `phrases.py` and `write_weights.py`: the original joke bank and model builder.
+- `large_phrases.py`: 580 additional complete punchlines.
+- `large_grammar.py`: vocabulary banks, sentence families, and additional openings.
+- `write_large_weights.py`: combines the original and additional material.
+
+Regenerate and rebuild after editing:
+
+```bash
+python write_weights.py
+python write_large_weights.py
+docker compose up -d --build
+```
+
+Keep existing identifiers stable by appending within groups. The large builder
+checks group sizes; intentionally expanding a group requires updating its expected
+count. The tests verify that the committed JSON matches its authored source and that
+all possible shipped combinations fit the length bound. Invalid slot references,
+weights, duplicate text, and invalid weekday restrictions are rejected.
 
 | Period | Local hours |
 | --- | --- |
@@ -233,13 +279,15 @@ editing a running installation; append new lines to a group to preserve its IDs.
 | Afternoon | 14:00–16:59 |
 | Evening | 17:00–23:59 |
 
-Set `COFFEE_TIMEZONE` in `compose.yaml` to another IANA timezone if required.
-The jokes are in English. They target the beverage, the clock, machine mysteries, and office life.
-They do not use anyone's name or personal information. History stores the last
-100 pairs of punchline/opener identifiers, plus a usage counter for each
-punchline that has been heard. Existing history databases are upgraded in place;
-usage counters start from their retained history. Keep the existing volume when
-updating with `docker compose up -d --build`.
+Set `COFFEE_TIMEZONE` to another IANA timezone in `.env` if required. Dates are
+converted before both weekday and time-period selection, including daylight-saving
+transitions. The jokes are in English and target drinks, the clock, machine mysteries,
+and office life.
+
+The history database stores the last 100 joke-family/opener pairs, plus usage
+counters for joke premises and fragments. Existing databases upgrade in place.
+Switching between large and classic retains their history. Keep the history volume
+when updating; no model download or training takes place at startup.
 
 ## Test and develop
 
@@ -260,7 +308,7 @@ docker run --rm coffee-snark-test
 ```
 
 GitHub Actions builds and tests the container on both x86-64 and ARM64 runners,
-then checks the production HTTP endpoint. The tests cover time zones and DST,
+then checks the production HTTP endpoints for both variants using the same history volume. The tests cover time zones and DST,
 coffee aliases and unsupported drinks, isolation of mystery-event material,
 manifest-driven generation, shared history across both API routes and restarts,
 comment length, repetition history,

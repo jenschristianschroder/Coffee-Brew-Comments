@@ -31,6 +31,14 @@ jobs:
         run: docker compose up -d --build --wait --wait-timeout 60
       - name: Exercise real HTTP endpoint
         run: python3 tests/smoke_http.py
+      - name: Switch to classic model using the existing history
+        env:
+          COFFEE_MODEL_VARIANT: classic
+        run: docker compose up -d --force-recreate --wait --wait-timeout 60
+      - name: Exercise classic model HTTP endpoint
+        env:
+          EXPECTED_MODEL_VARIANT: classic
+        run: python3 tests/smoke_http.py
       - name: Container diagnostics
         if: always()
         run: docker compose logs && docker compose down -v
