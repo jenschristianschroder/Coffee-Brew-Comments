@@ -21,29 +21,43 @@ for attempt in range(100):
 with urllib.request.urlopen(base + '/coffee-types', timeout=5) as response:
     assert json.load(response)['coffee_types'] == ['black', 'cappuccino', 'espresso', 'other']
 
+with urllib.request.urlopen(base + '/manifest', timeout=5) as response:
+    manifest = json.load(response)
+    assert manifest['name'] == 'coffee-comments'
+    assert manifest['endpoints']['execute'] == {'method': 'POST', 'path': '/generate'}
+    assert manifest['endpoints']['health'] == {'method': 'GET', 'path': '/health'}
+    assert {item['name'] for item in manifest['inputs']} == {'coffee_label', 'timestamp'}
+
 model = json.loads((Path(__file__).resolve().parents[1] / 'weights.json').read_text())
 other_lines = [item['text'] for item in model['punchlines'] if item.get('coffees') == ['other']]
-for coffee in ['black', 'cappuccino', 'espresso', 'other']:
-    payload = {'coffee_type': coffee, 'datetime': '2026-11-04T16:30:00+01:00'}
-    request = urllib.request.Request(base + '/comment', data=json.dumps(payload).encode(),
-                                     headers={'Content-Type': 'application/json'})
-    with urllib.request.urlopen(request, timeout=5) as response:
-        assert response.status == 200
-        result = json.load(response)
-        assert set(result) == {'comment'}
-        assert '4:30 p.m.' in result['comment']
-        if coffee == 'other':
-            assert any(result['comment'].endswith(line) for line in other_lines)
-        else:
-            assert coffee in result['comment'].lower()
-        print(json.dumps(result))
+routes = [('/comment', 'coffee_type', 'datetime', 'comment'),
+          (manifest['endpoints']['execute']['path'], 'coffee_label', 'timestamp', 'response')]
+for route, coffee_field, time_field, text_field in routes:
+    for coffee in ['black', 'cappuccino', 'espresso', 'other', 'unknown']:
+        payload = {coffee_field: coffee, time_field: '2026-11-04T16:30:00+01:00'}
+        request = urllib.request.Request(base + route, data=json.dumps(payload).encode(),
+                                         headers={'Content-Type': 'application/json'})
+        with urllib.request.urlopen(request, timeout=5) as response:
+            assert response.status == 200
+            result = json.load(response)
+            expected_fields = {'comment'} if route == '/comment' else {item['name'] for item in manifest['outputs']}
+            assert set(result) == expected_fields
+            assert '4:30 p.m.' in result[text_field]
+            if coffee in ('other', 'unknown'):
+                assert any(result[text_field].endswith(line) for line in other_lines)
+            else:
+                assert coffee in result[text_field].lower()
+            if route == '/generate':
+                assert isinstance(result['elapsed_s'], float) and result['elapsed_s'] >= 0
+            print(route, json.dumps(result))
 
-request = urllib.request.Request(base + '/comment', data=b'{"coffee_type":"espresso","datetime":"invalid"}',
-                                 headers={'Content-Type': 'application/json'})
-try:
-    urllib.request.urlopen(request, timeout=5)
-except urllib.error.HTTPError as error:
-    assert error.code == 422
-else:
-    raise AssertionError('Invalid date-time was accepted.')
+    payload = {coffee_field: 'espresso', time_field: '2026-11-04T16:30:00'}
+    request = urllib.request.Request(base + route, data=json.dumps(payload).encode(),
+                                     headers={'Content-Type': 'application/json'})
+    try:
+        urllib.request.urlopen(request, timeout=5)
+    except urllib.error.HTTPError as error:
+        assert error.code == 422
+    else:
+        raise AssertionError(f'{route} accepted a date-time without an offset.')
 print('HTTP smoke checks passed.')
