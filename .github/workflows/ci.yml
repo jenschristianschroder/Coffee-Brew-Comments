@@ -16,6 +16,9 @@ jobs:
         os: [ubuntu-latest, ubuntu-24.04-arm]
     runs-on: ${{ matrix.os }}
     timeout-minutes: 15
+    env:
+      COFFEE_PORT: "8004"
+      BASE_URL: http://127.0.0.1:8004
     steps:
       - uses: actions/checkout@v4
       - name: Build test image

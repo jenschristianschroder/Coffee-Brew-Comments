@@ -62,6 +62,8 @@ brew events or play audio itself.
 | Endpoint | Behavior |
 | --- | --- |
 | `POST /comment` | Accepts `coffee_type` and `datetime`; returns `{"comment": "..."}`. |
+| `POST /generate` | rpiCoffee contract: accepts `coffee_label` and `timestamp`; returns `response` and `elapsed_s`. |
+| `GET /manifest` | Describes the `coffee-comments` service for rpiCoffee's service registry. |
 | `GET /coffee-types` | Returns supported coffee type identifiers and configured timezone. |
 | `GET /health` | Returns `{"status":"ok"}` when the process is responding. |
 | `GET /docs` | Interactive API documentation. |
@@ -106,6 +108,69 @@ coffee, assume a drink exists, or identify a real maintenance fault. Its caffein
 metadata is unknown (`null`). Known coffee types keep their own joke pools.
 The caller should map its unrecognized events to `other`; arbitrary unsupported
 strings do not silently become this category.
+
+## Use with rpiCoffee
+
+The service implements the [rpiCoffee service manifest contract](https://github.com/jenschristianschroder/rpiCoffee/blob/main/docs/manifest-spec.md).
+`GET /manifest` advertises the service name `coffee-comments`, the required
+`coffee_label` and `timestamp` inputs, the `response` and `elapsed_s` outputs,
+`POST /generate` for execution, and `GET /health` for health checks.
+
+rpiCoffee's native app already uses host port 8080. Start this container on 8004:
+
+```bash
+COFFEE_PORT=8004 docker compose up -d --build
+curl -sS http://127.0.0.1:8004/manifest
+curl -sS http://127.0.0.1:8004/generate \
+  -H 'Content-Type: application/json' \
+  -d '{"coffee_label":"espresso","timestamp":"2026-11-04T16:30:00+01:00"}'
+```
+
+One possible response (generation time varies):
+
+```json
+{
+  "response": "An espresso at 4:30 p.m. Bold strategy for someone who enjoys sleeping.",
+  "elapsed_s": 0.002
+}
+```
+
+Put `COFFEE_PORT=8004` in a local `.env` file to retain the port choice for future
+Compose commands. The default host port remains 8080; the container always
+listens on 8080. Keep the existing history volume when updating.
+
+In rpiCoffee's service registry, register `coffee-comments` with endpoint
+`http://127.0.0.1:8004` when its main app runs on the same Pi. If the caller runs
+in a container on the same Docker network, use `http://coffee-snark:8080` instead.
+
+The generation step's input mapping is:
+
+```json
+{
+  "coffee_label": "$classifier.label",
+  "timestamp": "$sensor.timestamp"
+}
+```
+
+Wire the TTS and remote-save `text` inputs to `$coffee-comments.response`.
+The manifest supports the `skip` and `halt` failure policies; a 3-second
+per-step timeout is a reasonable starting point for this local service.
+The provider selector and the kiosk's legacy text-event/final-summary handling
+still need integration in rpiCoffee, where those paths currently name `llm`
+and `llm-ollama` explicitly. Registering this service does not perform that wiring.
+
+`/generate` and `/comment` use the same generator, timezone, aliases, and persistent
+repetition history. `unknown`, `unrecognized`, and `unrecognised` produce `other`
+machine-activity comments. Invalid requests return HTTP 422 without consuming
+history. `timestamp` follows the same offset-required validation as `datetime`.
+Each successful call consumes one comment; retries are not deduplicated.
+
+This is the structured coffee-generation contract, not a raw-prompt LLM API.
+Send only `coffee_label` and `timestamp`: `prompt`, `system`, `max_tokens`, and
+other extra fields are rejected. `elapsed_s` measures generation including the
+history update. Neural token counts and token rates are not reported. Settings
+remain configured through the environment and `weights.json`; the manifest does
+not advertise runtime settings endpoints.
 
 ## Call it from your brew handler
 
@@ -197,6 +262,7 @@ docker run --rm coffee-snark-test
 GitHub Actions builds and tests the container on both x86-64 and ARM64 runners,
 then checks the production HTTP endpoint. The tests cover time zones and DST,
 coffee aliases and unsupported drinks, isolation of mystery-event material,
+manifest-driven generation, shared history across both API routes and restarts,
 comment length, repetition history,
 fair use of the joke bank, database upgrades, concurrent requests, input
 validation, and the HTTP contract.
