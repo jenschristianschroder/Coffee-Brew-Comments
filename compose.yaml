@@ -6,7 +6,8 @@ services:
     ports:
       - "127.0.0.1:${COFFEE_PORT:-8080}:8080"
     environment:
-      COFFEE_TIMEZONE: Europe/Copenhagen
+      COFFEE_TIMEZONE: ${COFFEE_TIMEZONE:-Europe/Copenhagen}
+      COFFEE_MODEL_VARIANT: ${COFFEE_MODEL_VARIANT:-large}
       HISTORY_DB: /data/history.sqlite3
     volumes:
       - coffee-history:/data
