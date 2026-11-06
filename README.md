@@ -81,6 +81,8 @@ brew events or play audio itself.
 | `POST /generate` | rpiCoffee contract: accepts `coffee_label` and `timestamp`; returns `response` and `elapsed_s`. |
 | `GET /manifest` | Describes the `coffee-comments` service for rpiCoffee's service registry. |
 | `GET /model` | Reports the active variant, exact file size, component counts, and combination range without generating text. |
+| `GET /settings` | Returns the active model selector with `classic` / `large` choices. |
+| `PATCH /settings` | Switches models immediately and saves the choice across restarts. |
 | `GET /coffee-types` | Returns supported coffee type identifiers and configured timezone. |
 | `GET /health` | Returns `{"status":"ok"}` when the process is responding. |
 | `GET /docs` | Interactive API documentation. |
@@ -131,7 +133,8 @@ strings do not silently become this category.
 The service implements the [rpiCoffee service manifest contract](https://github.com/jenschristianschroder/rpiCoffee/blob/main/docs/manifest-spec.md).
 `GET /manifest` advertises the service name `coffee-comments`, the required
 `coffee_label` and `timestamp` inputs, the `response` and `elapsed_s` outputs,
-`POST /generate` for execution, and `GET /health` for health checks.
+`POST /generate` for execution, `GET /health` for health checks, and
+`GET /settings` / `PATCH /settings` for runtime model selection.
 
 rpiCoffee's native app already uses host port 8080. Start this container on 8004:
 
@@ -186,9 +189,13 @@ Each successful call consumes one comment; retries are not deduplicated.
 This is the structured coffee-generation contract, not a raw-prompt LLM API.
 Send only `coffee_label` and `timestamp`: `prompt`, `system`, `max_tokens`, and
 other extra fields are rejected. `elapsed_s` measures generation including the
-history update. Neural token counts and token rates are not reported. Settings
-remain configured through the environment and the selected model file; the manifest does
-not advertise runtime settings endpoints.
+history update. Neural token counts and token rates are not reported.
+
+In rpiCoffee, select the model under **Admin → Service Settings → coffee-comments →
+Model variant** and save. For an existing registration, click **Refresh manifest**
+(circular arrow) in **Service Registry** once after upgrading so the app discovers
+the new settings endpoints. This does not change the saved pipeline. The bundled
+rpiCoffee update includes dropdown support for the advertised choices.
 
 ## Call it from your brew handler
 
@@ -223,9 +230,26 @@ The service has no authentication and is intended for a local deployment.
 
 ## Select a model and inspect its size
 
-Set `COFFEE_MODEL_VARIANT=large` or `COFFEE_MODEL_VARIANT=classic` in your `.env`
-and recreate the container with `docker compose up -d --force-recreate`.
-The default is `large`. Both model files are bundled in the image.
+Use the settings API or rpiCoffee's admin dropdown to select `classic` or `large`:
+
+```bash
+curl -sS http://127.0.0.1:8080/settings
+curl -sS -X PATCH http://127.0.0.1:8080/settings \
+  -H 'Content-Type: application/json' \
+  -d '{"settings":{"COFFEE_MODEL_VARIANT":"classic"}}'
+```
+
+Use `large` to switch back. The change takes effect immediately for both generation
+endpoints, without restarting or consuming repetition history. The service saves
+the choice atomically in `/data/settings.json` in the existing data volume. It
+validates and saves before changing the running model; a failed update keeps the
+previous selection. Flat `{"COFFEE_MODEL_VARIANT":"large"}` bodies are also accepted.
+Invalid variants, missing values, and unknown keys return HTTP 422.
+
+`COFFEE_MODEL_VARIANT` in `.env` sets the initial default only. Startup precedence is
+an explicit `WEIGHTS_PATH` override, saved selection, the environment variable,
+then `large`. The Docker service runs one worker to keep runtime selection consistent.
+Other service configuration remains in the environment. Both model files are bundled in the image.
 The classic `weights.json` is byte-for-byte unchanged. Existing generation request
 and response fields, aliases, service name, and endpoints remain compatible.
 
@@ -239,8 +263,11 @@ of selectable combinations for fixed contexts. Neither this endpoint nor health
 checks consume repetition history.
 
 A supplied `WEIGHTS_PATH` overrides the variant selector, retaining custom-model
-support. Format 1 files still work. Format 2 adds `patterns`, `slots`, and optional
-weekday restrictions on complete jokes. An invalid variant fails at startup.
+support. The settings descriptor then shows `custom` as read-only, and updates
+return HTTP 409. Remove the override and restart to enable selection again; any
+previously saved variant is retained. Format 1 files still work. Format 2 adds
+`patterns`, `slots`, and optional weekday restrictions on complete jokes.
+An invalid active variant or malformed saved settings file fails startup clearly.
 
 ## Tune the humor and timing
 
